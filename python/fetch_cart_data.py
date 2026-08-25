@@ -145,6 +145,7 @@ def extract_fields(study: dict) -> dict:
         "std_ages":           " | ".join(elig.get("stdAges", [])),
         "primary_outcome":    primary_outcome,
         "results_posted":     bool(res),
+        "is_pediatric":       "CHILD" in elig.get("stdAges", []),
     }
 
 
@@ -166,6 +167,7 @@ def save_clean(studies: list):
     df["start_date"]  = pd.to_datetime(df["start_date"], errors="coerce")
     df["completion_date"] = pd.to_datetime(df["completion_date"], errors="coerce")
     df["start_year"]  = df["start_date"].dt.year
+    df["is_pediatric"] = df["is_pediatric"].fillna(False).astype(bool)
 
     # Normalize phase labels  (API returns "PHASE1", "PHASE2", etc.)
     phase_map = {
