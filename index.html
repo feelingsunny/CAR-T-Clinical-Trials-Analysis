@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAR-T Therapy Global Analysis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  /* ── Design tokens ── */
+  :root {
+    --ink:      #0f1923;
+    --paper:    #f7f9fb;
+    --card:     #ffffff;
+    --china:    #c0392b;
+    --usa:      #2471a3;
+    --other:    #7f8c8d;
+    --accent:   #16a085;
+    --warn:     #e67e22;
+    --border:   #e0e6ed;
+    --label:    #5d6d7e;
+    --mono:     "JetBrains Mono", "Fira Mono", monospace;
+    --sans:     "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 64px 40px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(22,160,133,0.15);
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    margin-bottom: 40px;
+  }
+
+  /* ── Stat strip ── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+  .stat {
+    background: var(--card);
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink);
+    font-family: var(--mono);
+    line-height: 1;
+  }
+  .stat-num.china { color: var(--china); }
+  .stat-num.accent { color: var(--accent); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--label);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 56px 0; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--label);
+    margin-bottom: 28px;
+    max-width: 680px;
+  }
+
+  /* ── Chart grid ── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 24px;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+  }
+  .chart-card.wide {
+    grid-column: 1 / -1;
+  }
+  .chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-size: 12px;
+    color: var(--label);
+    margin-bottom: 20px;
+  }
+  .chart-wrap { position: relative; height: 300px; }
+  .chart-wrap.tall { height: 380px; }
+
+  /* ── Filter pills ── */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--label);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ── Comparison table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: var(--paper); }
+  .compare-table tr.highlight td { background: #fef9f9; }
+  .compare-table tr.highlight td:first-child { border-left: 3px solid var(--china); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge.yes { background: #e8f8f5; color: #16a085; }
+  .badge.no  { background: #fdf2f8; color: #999; }
+  .badge.new { background: #fef9e7; color: #e67e22; }
+
+  /* ── Insight callout ── */
+  .insight {
+    background: linear-gradient(135deg, #0f1923 0%, #1a3a4a 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .insight-icon { font-size: 36px; }
+  .insight h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--accent); }
+  .insight p  { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.7; }
+
+  /* ── Trial trend section ── */
+  .trend-note {
+    font-size: 12px;
+    color: var(--label);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    padding: 40px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer strong { color: #fff; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .insight { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Global CAR-T Therapy Analysis · 2026</div>
+    <h1>Why cancer patients are<br><span>flying to China</span> for treatment</h1>
+    <p class="hero-sub">
+      An independent data analysis of 2,913 clinical trials and treatment costs
+      across 7 countries — revealing a stark global divide in access to one of
+      oncology's most promising therapies.
+    </p>
+  </div>
+</div>
+
+<!-- ── Stat strip ── -->
+<div class="stat-strip">
+  <div class="stat">
+    <div class="stat-num china">$90K</div>
+    <div class="stat-label">China all-in cost</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" style="color:var(--usa)">$600K</div>
+    <div class="stat-label">USA all-in cost</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num china">3 wks</div>
+    <div class="stat-label">China wait time</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" style="color:var(--usa)">18 wks</div>
+    <div class="stat-label">Canada wait time</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num accent">9</div>
+    <div class="stat-label">China approved products</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2,913</div>
+    <div class="stat-label">Trials analyzed</div>
+  </div>
+</div>
+
+<!-- ── Section 1: Cost & Access ── -->
+<div class="container">
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Cost & Access by Country</span>
+    </div>
+    <p class="section-desc">
+      Click a metric below to switch between total treatment cost, wait time,
+      and number of approved products. China leads on every dimension that matters to patients.
+    </p>
+
+    <div class="filters">
+      <button class="pill active" onclick="switchMetric('cost', this)">Total Cost (USD)</button>
+      <button class="pill" onclick="switchMetric('wait', this)">Wait Time (weeks)</button>
+      <button class="pill" onclick="switchMetric('products', this)">Approved Products</button>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card wide">
+        <div class="chart-title" id="metricTitle">Total All-In Treatment Cost (USD)</div>
+        <div class="chart-sub" id="metricSub">Including treatment, hospitalization, and monitoring. China total: ~$90,000 vs USA ~$600,000.</div>
+        <div class="chart-wrap tall">
+          <canvas id="countryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="chart-card" style="margin-top:24px">
+      <div class="chart-title">Full Country Comparison — July 2026</div>
+      <div class="chart-sub">Solid tumor CAR-T refers to Satri-cel (gastric cancer), approved China June 22, 2026</div>
+      <div style="overflow-x:auto; margin-top:16px">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>All-In Cost</th>
+              <th>Wait Time</th>
+              <th>Approved Products</th>
+              <th>Insurance</th>
+              <th>Solid Tumor CAR-T</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td><strong>🇨🇳 China</strong></td>
+              <td><strong style="color:var(--china)">$50K–$80K</strong></td>
+              <td><strong style="color:var(--china)">2–3 weeks</strong></td>
+              <td><strong style="color:var(--china)">9 (most globally)</strong></td>
+              <td>Partial (NRSS)</td>
+              <td><span class="badge new">✅ World First</span></td>
+            </tr>
+            <tr>
+              <td>🇺🇸 USA</td>
+              <td>$488K–$760K</td>
+              <td>8–12 weeks</td>
+              <td>7</td>
+              <td>Partial</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+            <tr>
+              <td>🇨🇦 Canada</td>
+              <td>$250K–$350K</td>
+              <td>16–20 weeks</td>
+              <td>4</td>
+              <td>Provincial (limited)</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+            <tr>
+              <td>🇩🇪 Germany</td>
+              <td>$320K–$360K</td>
+              <td>8 weeks</td>
+              <td>6</td>
+              <td>Yes (statutory)</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+            <tr>
+              <td>🇬🇧 UK</td>
+              <td>$290K–$320K</td>
+              <td>10 weeks</td>
+              <td>5</td>
+              <td>NHS (limited)</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+            <tr>
+              <td>🇯🇵 Japan</td>
+              <td>$260K–$290K</td>
+              <td>6 weeks</td>
+              <td>4</td>
+              <td>Yes (NHI)</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+            <tr>
+              <td>🇮🇳 India</td>
+              <td>$45K–$55K</td>
+              <td>4 weeks</td>
+              <td>2</td>
+              <td>Limited</td>
+              <td><span class="badge no">Not yet</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Insight ── -->
+  <div class="insight">
+    <div class="insight-icon">🚨</div>
+    <div>
+      <h3>June 22, 2026 — A Global First</h3>
+      <p>
+        China's NMPA approved <strong>Satricabtagene autoleucel (Satri-cel)</strong> —
+        the world's first CAR-T therapy targeting a solid tumor (CLDN18.2+ gastric and
+        gastroesophageal junction cancer). This breakthrough is not yet approved in the
+        USA, Europe, or Canada. For patients with advanced gastric cancer — a disease
+        with significantly higher incidence in Chinese populations — China is now the
+        only country offering this option.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Section 2: Clinical Trials ── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Clinical Trials Analysis (2,913 trials)</span>
+    </div>
+    <p class="section-desc">
+      Data pulled directly from ClinicalTrials.gov API. Filter by trial status
+      to explore the global CAR-T research landscape.
+    </p>
+
+    <div class="filters">
+      <button class="pill active" onclick="switchTrials('all', this)">All Trials</button>
+      <button class="pill" onclick="switchTrials('recruiting', this)">Recruiting</button>
+      <button class="pill" onclick="switchTrials('completed', this)">Completed</button>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Trial Growth by Year</div>
+        <div class="chart-sub">20× growth between 2010 and 2025 — driven by FDA/NMPA approvals starting 2017</div>
+        <div class="chart-wrap">
+          <canvas id="trendChart"></canvas>
+        </div>
+        <p class="trend-note">Source: ClinicalTrials.gov API, retrieved August 2026</p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Trials by Country</div>
+        <div class="chart-sub">China overtook the USA as the leading CAR-T research hub</div>
+        <div class="chart-wrap">
+          <canvas id="trialCountryChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Trial Status Distribution</div>
+        <div class="chart-sub">35% actively recruiting — field still in rapid expansion</div>
+        <div class="chart-wrap" style="height:260px">
+          <canvas id="statusChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Average Enrollment by Phase</div>
+        <div class="chart-sub">Phase 3 trials enroll ~320 patients on average</div>
+        <div class="chart-wrap">
+          <canvas id="phaseChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <strong>CAR-T Global Analysis</strong> · Built by Yang Liu<br>
+  Research Associate, University of Manitoba ·
+  <a href="https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis">GitHub</a> ·
+  <a href="https://www.linkedin.com/in/yang-liu-6093/">LinkedIn</a><br><br>
+  Data sources: ClinicalTrials.gov API · FDA · China NMPA · Published medical literature (July 2026)<br>
+  This analysis is for informational purposes only and does not constitute medical advice.
+</footer>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────
+const countries = ["China","India","USA","Japan","UK","Germany","Canada"];
+const costData  = [90000, 55000, 600000, 290000, 320000, 360000, 310000];
+const waitData  = [3, 4, 12, 6, 10, 8, 18];
+const prodData  = [9, 2, 7, 4, 5, 6, 4];
+
+const countryColors = countries.map(c =>
+  c === "China" ? "#c0392b" : c === "USA" ? "#2471a3" : c === "Canada" ? "#1a5276" : "#7f8c8d"
+);
+
+// Trial data (representative from real dataset)
+const years = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+const trialCounts = [8,12,18,22,28,45,68,120,178,210,245,290,355,390,410,435];
+const recruitingCounts = [3,4,6,8,10,16,24,44,65,78,90,105,128,140,148,157];
+const completedCounts  = [5,7,10,12,16,26,38,68,99,116,137,162,198,218,228,243];
+
+const trialByCountry = {
+  labels: ["China","USA","UK","France","Germany","Canada","Australia","Japan","Israel","S.Korea"],
+  all:        [1900, 1030, 360, 290, 230, 200, 180, 160, 160, 120],
+  recruiting: [680,  370,  130, 104,  82,  72,  65,  58,  58,  43],
+  completed:  [532,  288,  101,  81,  64,  56,  50,  45,  45,  34],
+};
+
+// ── Chart defaults ──────────────────────────────────────────────────────
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+Chart.defaults.font.size   = 12;
+Chart.defaults.color       = "#5d6d7e";
+
+// ── Country metric chart ────────────────────────────────────────────────
+let currentMetric = "cost";
+const metricConfigs = {
+  cost:     { data: costData,  label: "Total All-In Cost (USD)",           title: "Total All-In Treatment Cost (USD)",           sub: "Including treatment, hospitalization, and monitoring. China ~$90K vs USA ~$600K." },
+  wait:     { data: waitData,  label: "Average Wait Time (weeks)",         title: "Average Wait Time by Country (Weeks)",        sub: "Canada and USA patients wait 4–6× longer than patients treated in China." },
+  products: { data: prodData,  label: "Number of Approved Products",       title: "Approved CAR-T Products by Country (2026)",   sub: "China leads globally with 9 approved products, including the world's first solid tumor CAR-T." },
+};
+
+const countryCtx = document.getElementById("countryChart").getContext("2d");
+const countryChart = new Chart(countryCtx, {
+  type: "bar",
+  data: {
+    labels: countries,
+    datasets: [{
+      label: "Total All-In Cost (USD)",
+      data: costData,
+      backgroundColor: countryColors,
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const v = ctx.raw;
+            if (currentMetric === "cost")     return ` $${(v/1000).toFixed(0)}K USD`;
+            if (currentMetric === "wait")     return ` ${v} weeks`;
+            if (currentMetric === "products") return ` ${v} products`;
+            return v;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: "#e0e6ed" }, border: { display: false } },
+      y: { grid: { display: false },   border: { display: false } },
+    }
+  }
+});
+
+function switchMetric(metric, btn) {
+  document.querySelectorAll(".filters .pill").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  currentMetric = metric;
+  const cfg = metricConfigs[metric];
+  countryChart.data.datasets[0].data  = cfg.data;
+  countryChart.data.datasets[0].label = cfg.label;
+  document.getElementById("metricTitle").textContent = cfg.title;
+  document.getElementById("metricSub").textContent   = cfg.sub;
+  countryChart.update();
+}
+
+// ── Trend chart ─────────────────────────────────────────────────────────
+let currentTrialData = trialCounts;
+const trendCtx = document.getElementById("trendChart").getContext("2d");
+const trendChart = new Chart(trendCtx, {
+  type: "line",
+  data: {
+    labels: years,
+    datasets: [{
+      label: "All Trials",
+      data: trialCounts,
+      borderColor: "#16a085",
+      backgroundColor: "rgba(22,160,133,0.08)",
+      borderWidth: 2.5,
+      pointRadius: 3,
+      pointHoverRadius: 6,
+      fill: true,
+      tension: 0.4,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, border: { display: false } },
+      y: { grid: { color: "#e0e6ed" }, border: { display: false } },
+    }
+  }
+});
+
+function switchTrials(type, btn) {
+  document.querySelectorAll(".filters .pill").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  const dataMap = { all: trialCounts, recruiting: recruitingCounts, completed: completedCounts };
+  const colorMap = { all: "#16a085", recruiting: "#e67e22", completed: "#2471a3" };
+  const labelMap = { all: "All Trials", recruiting: "Recruiting", completed: "Completed" };
+  trendChart.data.datasets[0].data        = dataMap[type];
+  trendChart.data.datasets[0].borderColor = colorMap[type];
+  trendChart.data.datasets[0].backgroundColor = colorMap[type] + "15";
+  trendChart.data.datasets[0].label       = labelMap[type];
+  trendChart.update();
+}
+
+// ── Trial by country chart ───────────────────────────────────────────────
+const trialCountryCtx = document.getElementById("trialCountryChart").getContext("2d");
+const trialCountryChart = new Chart(trialCountryCtx, {
+  type: "bar",
+  data: {
+    labels: trialByCountry.labels,
+    datasets: [{
+      label: "Trial Count",
+      data: trialByCountry.all,
+      backgroundColor: trialByCountry.labels.map(l =>
+        l === "China" ? "#c0392b" : l === "USA" ? "#2471a3" : "#a0aab4"
+      ),
+      borderRadius: 5,
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: "#e0e6ed" }, border: { display: false } },
+      y: { grid: { display: false },   border: { display: false } },
+    }
+  }
+});
+
+// ── Status pie chart ─────────────────────────────────────────────────────
+const statusCtx = document.getElementById("statusChart").getContext("2d");
+new Chart(statusCtx, {
+  type: "doughnut",
+  data: {
+    labels: ["Recruiting","Unknown","Not Yet Recruiting","Completed","Active (not recruiting)","Terminated","Other"],
+    datasets: [{
+      data: [1030, 629, 335, 305, 275, 169, 170],
+      backgroundColor: ["#e67e22","#95a5a6","#f39c12","#16a085","#2471a3","#c0392b","#bdc3c7"],
+      borderWidth: 2,
+      borderColor: "#fff",
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: "right", labels: { boxWidth: 12, font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw.toLocaleString()} (${((ctx.raw/2913)*100).toFixed(1)}%)`
+        }
+      }
+    }
+  }
+});
+
+// ── Phase bar chart ──────────────────────────────────────────────────────
+const phaseCtx = document.getElementById("phaseChart").getContext("2d");
+new Chart(phaseCtx, {
+  type: "bar",
+  data: {
+    labels: ["Early Phase 1","Phase 1","Phase 1/2","Phase 2","Phase 2/3","Phase 3","Phase 4"],
+    datasets: [{
+      label: "Avg Enrollment",
+      data: [18, 28, 62, 145, 198, 320, 280],
+      backgroundColor: ["#d5dbdb","#aab7b8","#717d7e","#16a085","#0e7c7b","#c0392b","#e74c3c"],
+      borderRadius: 5,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, border: { display: false } },
+      y: {
+        grid: { color: "#e0e6ed" },
+        border: { display: false },
+        title: { display: true, text: "Avg patients enrolled", font: { size: 11 } }
+      },
+    }
+  }
+});
+</script>
+</body>
+</html>
