@@ -1,0 +1,8 @@
+country,treatment_only_usd,total_allin_usd,avg_wait_weeks,approved_products,solid_tumor_cart,insurance
+USA,430000,600000,12,7,False,Partial
+China,65000,90000,3,9,True,Partial (NRSS)
+Canada,280000,310000,18,4,False,Provincial (limited)
+Germany,320000,360000,8,6,False,Yes (statutory)
+UK,290000,320000,10,5,False,NHS (limited)
+Japan,260000,290000,6,4,False,Yes (NHI)
+India,45000,55000,4,2,False,Limited
