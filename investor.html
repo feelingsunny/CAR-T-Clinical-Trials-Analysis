@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARTBridge Health — Cross-Border CAR-T Medical Coordination</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --ink:     #0a1628;
+  --paper:   #f8fafb;
+  --card:    #ffffff;
+  --teal:    #0d9488;
+  --teal2:   #0f766e;
+  --red:     #dc2626;
+  --blue:    #1d4ed8;
+  --muted:   #64748b;
+  --border:  #e2e8f0;
+  --light:   #f1f5f9;
+  --gold:    #d97706;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,22,40,0.97);
+  backdrop-filter: blur(8px);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.nav-logo { color: #fff; font-weight: 700; font-size: 18px; letter-spacing: -0.5px; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,0.7); text-decoration: none;
+  font-size: 13px; font-weight: 500; transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+.lang-btn {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 12px;
+  cursor: pointer; transition: background 0.2s;
+}
+.lang-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #0a1628 0%, #0f2a4a 60%, #0a1628 100%);
+  padding: 100px 40px 80px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute; top: -100px; right: -100px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,148,136,0.15) 0%, transparent 70%);
+}
+.hero::after {
+  content: "";
+  position: absolute; bottom: -80px; left: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,78,216,0.1) 0%, transparent 70%);
+}
+.hero-tag {
+  display: inline-block;
+  background: rgba(13,148,136,0.2); border: 1px solid rgba(13,148,136,0.4);
+  color: #5eead4; font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 20px; margin-bottom: 28px;
+}
+.hero h1 {
+  font-size: clamp(32px, 5vw, 60px); font-weight: 800;
+  color: #fff; line-height: 1.1; max-width: 800px;
+  margin: 0 auto 24px;
+}
+.hero h1 em { color: var(--teal); font-style: normal; }
+.hero-sub {
+  font-size: 18px; color: rgba(255,255,255,0.65);
+  max-width: 580px; margin: 0 auto 48px; line-height: 1.7;
+}
+.hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--teal); color: #fff; border: none;
+  padding: 14px 32px; border-radius: 8px; font-size: 15px;
+  font-weight: 600; cursor: pointer; text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--teal2); }
+.btn-secondary {
+  background: transparent; color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 14px 32px; border-radius: 8px; font-size: 15px;
+  font-weight: 600; cursor: pointer; text-decoration: none;
+  transition: border-color 0.2s;
+}
+.btn-secondary:hover { border-color: #fff; }
+
+/* ── STAT STRIP ── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  background: var(--ink);
+}
+.stat {
+  padding: 28px 24px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.stat-n {
+  font-size: 36px; font-weight: 800; line-height: 1;
+  font-variant-numeric: tabular-nums; margin-bottom: 6px;
+}
+.stat-n.t { color: var(--teal); }
+.stat-n.r { color: #f87171; }
+.stat-n.b { color: #60a5fa; }
+.stat-n.g { color: #fff; }
+.stat-l { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── SECTIONS ── */
+.section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+.section-tag {
+  font-size: 11px; font-weight: 700; color: var(--teal);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(24px, 4vw, 38px); font-weight: 800;
+  color: var(--ink); line-height: 1.2; margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+/* ── PROBLEM CARDS ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px; margin-bottom: 48px;
+}
+.problem-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px;
+}
+.problem-card.highlight { border-color: var(--teal); background: #f0fdfa; }
+.problem-icon { font-size: 28px; margin-bottom: 16px; }
+.problem-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.problem-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.problem-card .big { font-size: 28px; font-weight: 800; color: var(--red); margin-bottom: 4px; }
+.problem-card .big.g { color: var(--teal); }
+
+/* ── COMPARISON TABLE ── */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cmp-table th {
+  background: var(--ink); color: #fff; padding: 14px 18px;
+  text-align: left; font-weight: 600; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.cmp-table td { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.cmp-table tr.china td { background: #f0fdfa; font-weight: 600; }
+.cmp-table tr.china td:first-child { border-left: 3px solid var(--teal); }
+.badge-yes { background: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-no  { background: #f3f4f6; color: #9ca3af; padding: 3px 10px; border-radius: 10px; font-size: 11px; }
+.badge-new { background: #fef3c7; color: #92400e; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+
+/* ── SERVICE STEPS ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.step-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; position: relative;
+}
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal); color: #fff;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.step-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.step-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── DATA CHARTS ── */
+.chart-bg { background: #f8fafb; padding: 60px 40px; }
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 24px; max-width: 1100px; margin: 0 auto;
+}
+.chart-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px;
+}
+.chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.chart-card .sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.chart-wrap { height: 280px; position: relative; }
+
+/* ── TEAM ── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.team-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px;
+}
+.avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+  color: #fff; font-weight: 700; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.team-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.team-card .role { font-size: 13px; color: var(--teal); margin-bottom: 12px; }
+.team-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.credential {
+  display: inline-block; background: var(--light);
+  color: var(--ink); font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 4px; margin: 3px 3px 0 0;
+}
+
+/* ── REVENUE ── */
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.rev-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; text-align: center;
+}
+.rev-card .amount { font-size: 28px; font-weight: 800; color: var(--teal); margin-bottom: 6px; }
+.rev-card .label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.rev-card .note { font-size: 12px; color: var(--muted); }
+
+/* ── ALERT BOX ── */
+.alert {
+  background: linear-gradient(135deg, var(--ink) 0%, #0f2a4a 100%);
+  border-radius: 16px; padding: 40px;
+  display: grid; grid-template-columns: auto 1fr; gap: 24px;
+  align-items: start; margin: 48px 0;
+}
+.alert-icon { font-size: 40px; }
+.alert h3 { font-size: 20px; font-weight: 700; color: var(--teal); margin-bottom: 10px; }
+.alert p { font-size: 15px; color: rgba(255,255,255,0.75); line-height: 1.7; }
+
+/* ── CONTACT ── */
+.contact-bg { background: var(--ink); padding: 80px 40px; text-align: center; }
+.contact-bg h2 { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 16px; }
+.contact-bg p { color: rgba(255,255,255,0.6); font-size: 16px; max-width: 500px; margin: 0 auto 40px; }
+.contact-grid {
+  display: flex; gap: 16px; justify-content: center;
+  flex-wrap: wrap; max-width: 600px; margin: 0 auto;
+}
+.contact-item {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 16px 24px; color: #fff; text-decoration: none;
+  font-size: 14px; font-weight: 500; transition: background 0.2s;
+}
+.contact-item:hover { background: rgba(255,255,255,0.15); }
+.contact-item span { color: var(--teal); display: block; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── FOOTER ── */
+footer {
+  background: #060e1a; padding: 24px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+footer .logo { color: #fff; font-weight: 700; font-size: 15px; }
+footer .logo span { color: var(--teal); }
+footer p { color: rgba(255,255,255,0.4); font-size: 12px; }
+
+/* ── LANG TOGGLE ── */
+.en-only, .cn-only { transition: opacity 0.2s; }
+body.cn .en-only { display: none; }
+body.en .cn-only { display: none; }
+
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 4px;
+  background: none; border: none;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: #fff; border-radius: 2px;
+  transition: all 0.25s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed; top: 60px; left: 0; right: 0;
+  background: rgba(10,22,40,0.98);
+  backdrop-filter: blur(12px);
+  padding: 20px 24px 28px;
+  z-index: 99;
+  flex-direction: column; gap: 4px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: rgba(255,255,255,0.8); text-decoration: none;
+  font-size: 16px; font-weight: 500;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mobile-menu a:last-of-type { border-bottom: none; }
+.mobile-menu .lang-btn-mobile {
+  margin-top: 16px; align-self: flex-start;
+  background: rgba(13,148,136,0.2); border: 1px solid rgba(13,148,136,0.4);
+  color: #5eead4; padding: 8px 18px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
+
+/* ── TABLET (768px) ── */
+@media (max-width: 768px) {
+  .hero { padding: 72px 24px 60px; }
+  .section { padding: 56px 24px; }
+  .chart-bg { padding: 48px 24px; }
+  nav { padding: 0 24px; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .stat { padding: 20px 16px; }
+  .stat-n { font-size: 28px; }
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .revenue-grid { grid-template-columns: repeat(3, 1fr); }
+  .team-grid { grid-template-columns: 1fr; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .contact-bg { padding: 56px 24px; }
+}
+
+/* ── MOBILE (480px) ── */
+@media (max-width: 480px) {
+  /* Nav: hide links, show hamburger */
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+
+  /* Hero */
+  .hero { padding: 56px 20px 48px; text-align: left; }
+  .hero-tag { font-size: 10px; }
+  .hero-sub { font-size: 15px; }
+  .hero-btns { flex-direction: column; align-items: flex-start; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+
+  /* Stats: 2 columns */
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat { padding: 16px 12px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .stat-n { font-size: 24px; }
+  .stat-l { font-size: 10px; }
+
+  /* Sections */
+  .section { padding: 48px 20px; }
+  .section-title { font-size: 24px; }
+  .section-sub { font-size: 14px; }
+
+  /* Problem cards: single column */
+  .problem-grid { grid-template-columns: 1fr; }
+  .problem-card .big { font-size: 24px; }
+
+  /* Comparison table: scrollable */
+  .cmp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+  .cmp-table { min-width: 560px; font-size: 12px; }
+  .cmp-table th, .cmp-table td { padding: 10px 12px; }
+
+  /* Video section */
+  .video-section { padding: 48px 20px !important; }
+  .video-section h2 { font-size: 22px !important; }
+  .video-section p { font-size: 14px !important; }
+  .video-wrap { border-radius: 10px !important; }
+
+  /* Alert */
+  .alert { grid-template-columns: 1fr; padding: 28px 20px; gap: 16px; }
+  .alert-icon { font-size: 32px; }
+  .alert h3 { font-size: 17px; }
+  .alert p { font-size: 14px; }
+
+  /* Service steps: single column */
+  .steps { grid-template-columns: 1fr; }
+
+  /* Revenue: 2 columns */
+  .revenue-grid { grid-template-columns: repeat(2, 1fr); }
+  .rev-card .amount { font-size: 22px; }
+
+  /* Charts */
+  .chart-bg { padding: 48px 20px; }
+  .chart-grid { grid-template-columns: 1fr; gap: 16px; }
+  .chart-wrap { height: 220px !important; }
+  .chart-card { padding: 20px; }
+
+  /* Team */
+  .team-grid { grid-template-columns: 1fr; }
+
+  /* Contact */
+  .contact-bg { padding: 48px 20px; }
+  .contact-bg h2 { font-size: 26px; }
+  .contact-grid { flex-direction: column; }
+  .contact-item { width: 100%; text-align: center; }
+
+  /* Footer */
+  footer { flex-direction: column; text-align: center; padding: 20px; }
+}
+</style>
+</head>
+<body class="en">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">CART<span>Bridge</span> Health</div>
+  <div class="nav-links">
+    <a href="#problem" class="en-only">Problem</a>
+    <a href="#problem" class="cn-only">痛点</a>
+    <a href="#service" class="en-only">Service</a>
+    <a href="#service" class="cn-only">服务</a>
+    <a href="#data" class="en-only">Data</a>
+    <a href="#data" class="cn-only">数据</a>
+    <a href="#team" class="en-only">Team</a>
+    <a href="#team" class="cn-only">团队</a>
+    <a href="#contact" class="en-only">Contact</a>
+    <a href="#contact" class="cn-only">联系我们</a>
+    <button class="lang-btn" onclick="toggleLang()">中文 / EN</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#problem" onclick="closeMenu()" class="en-only">Problem</a>
+  <a href="#problem" onclick="closeMenu()" class="cn-only">痛点</a>
+  <a href="#service" onclick="closeMenu()" class="en-only">Service</a>
+  <a href="#service" onclick="closeMenu()" class="cn-only">服务</a>
+  <a href="#data" onclick="closeMenu()" class="en-only">Data</a>
+  <a href="#data" onclick="closeMenu()" class="cn-only">数据</a>
+  <a href="#team" onclick="closeMenu()" class="en-only">Team</a>
+  <a href="#team" onclick="closeMenu()" class="cn-only">团队</a>
+  <a href="#contact" onclick="closeMenu()" class="en-only">Contact</a>
+  <a href="#contact" onclick="closeMenu()" class="cn-only">联系我们</a>
+  <button class="lang-btn-mobile" onclick="toggleLang()">中文 / EN</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag en-only">Cross-Border CAR-T Medical Coordination · 2026</div>
+  <div class="hero-tag cn-only">跨境 CAR-T 医疗协调平台 · 2026</div>
+
+  <h1 class="en-only">The world's most advanced<br>cancer therapy.<br><em>At a fraction of the cost.</em></h1>
+  <h1 class="cn-only">全球最先进的癌症疗法，<br><em>十分之一的价格</em>，<br>三分之一的等待时间。</h1>
+
+  <p class="hero-sub en-only">CARTBridge Health connects North American cancer patients with world-class CAR-T centers in China — and Chinese patients seeking FDA-approved treatments in North America.</p>
+  <p class="hero-sub cn-only">CARTBridge Health 连接北美癌症患者与中国顶级 CAR-T 医疗中心，同时协助中国患者赴北美获得 FDA 批准的创新疗法。</p>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn-primary en-only">Talk to us</a>
+    <a href="#contact" class="btn-primary cn-only">联系我们</a>
+    <a href="#data" class="btn-secondary en-only">See the data</a>
+    <a href="#data" class="btn-secondary cn-only">查看数据</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-n r">$600K</div>
+    <div class="stat-l en-only">USA all-in cost</div>
+    <div class="stat-l cn-only">美国全包费用</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n t">$90K</div>
+    <div class="stat-l en-only">China all-in cost</div>
+    <div class="stat-l cn-only">中国全包费用</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n r">18 wks</div>
+    <div class="stat-l en-only">Canada wait time</div>
+    <div class="stat-l cn-only">加拿大等待时间</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n t">3 wks</div>
+    <div class="stat-l en-only">China wait time</div>
+    <div class="stat-l cn-only">中国等待时间</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n t">9</div>
+    <div class="stat-l en-only">China approved products</div>
+    <div class="stat-l cn-only">中国已批准产品</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n g">2,913</div>
+    <div class="stat-l en-only">Trials analyzed</div>
+    <div class="stat-l cn-only">临床试验分析数量</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div id="problem">
+<div class="section">
+  <div class="section-tag en-only">The Problem</div>
+  <div class="section-tag cn-only">问题所在</div>
+  <h2 class="section-title en-only">CAR-T works. Access doesn't.</h2>
+  <h2 class="section-title cn-only">CAR-T 疗法有效，但患者无法获得。</h2>
+  <p class="section-sub en-only">CAR-T therapy achieves 70–93% response rates in blood cancers. But in North America, the cost, wait time, and limited indications lock most patients out.</p>
+  <p class="section-sub cn-only">CAR-T 疗法对血液癌症的有效缓解率高达 70–93%，但在北美，高昂费用、漫长等待和有限适应症，让大多数患者无缘这一疗法。</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="big">$600K</div>
+      <h3 class="en-only">Cost barrier</h3>
+      <h3 class="cn-only">费用壁垒</h3>
+      <p class="en-only">Average all-in cost in the USA. Insurance covers only part — often leaving families with hundreds of thousands in debt.</p>
+      <p class="cn-only">美国 CAR-T 治疗全包均价。保险仅部分覆盖，许多家庭背负数十万美元债务。</p>
+    </div>
+    <div class="problem-card">
+      <div class="big">18 wks</div>
+      <h3 class="en-only">Wait time</h3>
+      <h3 class="cn-only">等待时间</h3>
+      <p class="en-only">Average wait in Canada. CAR-T must be given during remission windows — delays can mean permanent ineligibility.</p>
+      <p class="cn-only">加拿大平均等待时间。CAR-T 必须在缓解窗口期内进行，延误可能导致永久失去治疗资格。</p>
+    </div>
+    <div class="problem-card">
+      <div class="big">7</div>
+      <h3 class="en-only">Limited products</h3>
+      <h3 class="cn-only">产品数量有限</h3>
+      <p class="en-only">FDA-approved CAR-T products in the USA. Many patients don't qualify under the narrow approved indications.</p>
+      <p class="cn-only">美国 FDA 批准的 CAR-T 产品数量。许多患者不符合狭窄的批准适应症。</p>
+    </div>
+    <div class="problem-card highlight">
+      <div class="big g">9</div>
+      <h3 class="en-only">China's solution</h3>
+      <h3 class="cn-only">中国的解决方案</h3>
+      <p class="en-only">NMPA-approved products — more than any other country. $50K–$80K all-in. 2–3 week wait. World's first solid tumor CAR-T approved June 2026.</p>
+      <p class="cn-only">NMPA 已批准产品数量，全球最多。全包 5万–8万美元，等待 2–3 周。2026 年 6 月批准全球首个实体瘤 CAR-T。</p>
+    </div>
+  </div>
+
+  <!-- comparison table -->
+  <div class="cmp-wrap" style="border-radius:12px; border:1px solid var(--border);">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th class="en-only">Country</th><th class="cn-only">国家</th>
+          <th class="en-only">All-In Cost</th><th class="cn-only">全包费用</th>
+          <th class="en-only">Wait Time</th><th class="cn-only">等待时间</th>
+          <th class="en-only">Approved Products</th><th class="cn-only">批准产品</th>
+          <th class="en-only">Solid Tumor</th><th class="cn-only">实体瘤</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="china">
+          <td>🇨🇳 China / 中国</td>
+          <td style="color:#0d9488;font-weight:700">$50K–$80K</td>
+          <td style="color:#0d9488;font-weight:700">2–3 weeks / 周</td>
+          <td style="color:#0d9488;font-weight:700">9 (most globally / 全球最多)</td>
+          <td><span class="badge-new">World First / 全球首创</span></td>
+        </tr>
+        <tr><td>🇺🇸 USA / 美国</td><td>$488K–$760K</td><td>8–12 weeks / 周</td><td>7</td><td><span class="badge-no">Not yet / 未批准</span></td></tr>
+        <tr><td>🇨🇦 Canada / 加拿大</td><td>$250K–$350K</td><td>16–20 weeks / 周</td><td>4</td><td><span class="badge-no">Not yet / 未批准</span></td></tr>
+        <tr><td>🇩🇪 Germany / 德国</td><td>$320K–$360K</td><td>8 weeks / 周</td><td>6</td><td><span class="badge-no">Not yet / 未批准</span></td></tr>
+        <tr><td>🇬🇧 UK / 英国</td><td>$290K–$320K</td><td>10 weeks / 周</td><td>5</td><td><span class="badge-no">Not yet / 未批准</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- VIDEO / TEXT SECTION -->
+<div class="video-section" style="background:#0a1628; padding:60px 40px;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-tag" style="color:#5eead4;">
+      <span class="en-only">Case Study</span>
+      <span class="cn-only">案例分析</span>
+    </div>
+    <h2 class="section-title" style="color:#fff; margin-bottom:12px;">
+      <span class="en-only">CAR-T therapy explained — one patient's story</span>
+      <span class="cn-only">CAR-T 疗法详解——一位患者的亲身经历</span>
+    </h2>
+    <p style="color:rgba(255,255,255,0.55); font-size:15px; margin-bottom:36px; max-width:680px; line-height:1.7;">
+      <span class="en-only">China is attracting overseas cancer patients with CAR-T therapy because it can be substantially cheaper and faster than options available in Australia, the USA, and the UK. The following case highlights one patient's successful experience — while noting that long-term outcome data and China's status as a medical-tourism hub are still developing.</span>
+      <span class="cn-only">中国正以更低廉、更快速的 CAR-T 疗法吸引来自澳大利亚、美国和英国的海外癌症患者。以下案例展示了一位患者的成功经历，同时也指出中国长期疗效数据和医疗旅游地位仍在发展中。</span>
+    </p>
+
+    <!-- Video embed (hidden in regions where YouTube is blocked) -->
+    <div class="video-wrap" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:16px; border:1px solid rgba(255,255,255,0.1); margin-bottom:48px;">
+      <iframe
+        src="https://www.youtube.com/embed/FPHI7p4ei74?start=1162"
+        title="CAR-T Therapy"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Key points below the video -->
+    <p style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:24px; text-align:center;">
+      <span class="en-only">Can't watch the video? Key points summarized below.</span>
+      <span class="cn-only">无法观看视频？以下为关键内容摘要。</span>
+    </p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#5eead4; text-transform:uppercase; margin-bottom:12px;">
+          <span class="en-only">Why patients travel</span>
+          <span class="cn-only">患者为何赴华</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">Amanda Harvey, an Australian doctor with relapsed multiple myeloma, could not access CAR-T in Australia in 2025. Treatment in the US or UK would have cost ~AUD 1 million. She paid ~AUD 110,000 in China — roughly ten times less — plus travel and living expenses.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">澳大利亚医生 Amanda Harvey 患有复发性多发性骨髓瘤，2025 年在澳大利亚无法获得 CAR-T 疗法。在美国或英国治疗费用约为 100 万澳元，而她在中国仅花费约 11 万澳元，约为前者的十分之一。</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#5eead4; text-transform:uppercase; margin-bottom:12px;">
+          <span class="en-only">How it works & what happened</span>
+          <span class="cn-only">治疗过程与结果</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">Doctors collected her T cells, modified them to recognize myeloma cells, then infused them back. In Shanghai, she underwent testing, cell collection, chemotherapy, and reinfusion. She felt very ill the first week — but a bone-marrow test two weeks later found no myeloma cells. She then returned to Australia for follow-up care.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">医生采集她的 T 细胞，改造使其能识别骨髓瘤细胞，再回输体内。在上海完成检测、细胞采集、化疗和回输后，她第一周感觉非常不适——但两周后骨髓检测显示骨髓瘤细胞完全消失，随后返回澳大利亚继续随访。</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#5eead4; text-transform:uppercase; margin-bottom:12px;">
+          <span class="en-only">Why China is faster</span>
+          <span class="cn-only">为何中国更快</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">Her cells were manufactured and returned from Beijing in just 8 days. US manufacturing reportedly takes 2–3 months — a delay that can prevent rapidly worsening patients from receiving their engineered cells in time.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">她的细胞在北京仅用 8 天完成制造并回输。而美国据报需要 2–3 个月——这一延误可能导致病情迅速恶化的患者无法及时获得工程化细胞治疗。</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#f59e0b; text-transform:uppercase; margin-bottom:12px; letter-spacing:2px; font-size:11px;">
+          <span class="en-only">What is still unknown</span>
+          <span class="cn-only">尚待明确的问题</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">Harvey was in complete remission 7 months after treatment, calling the result excellent. However, she noted that the Shanghai treatment differs somewhat from US/European protocols and does not yet have enough long-term data for reliable comparison. CAR-T is generally used after other treatments fail.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">Harvey 在治疗 7 个月后达到完全缓解，称结果出色。但她指出，上海的疗法与美欧方案有所不同，目前尚无足够的长期数据进行可靠比较。CAR-T 目前通常在其他疗法失败后使用。</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#5eead4; text-transform:uppercase; margin-bottom:12px;">
+          <span class="en-only">Why China leads</span>
+          <span class="cn-only">中国领先的原因</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">Bloomberg health reporter Karoline Kan attributes China's lead to supportive policy, permissive regulation, advanced hospitals, large patient pools, and extensive clinical trials. China's first CAR-T product was approved in 2021 — 4 years after the US — but its trial volume now leads globally, and larger manufacturing capacity reduces costs.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">彭博健康记者 Karoline Kan 将中国的领先归因于政策支持、相对宽松的监管、先进医院、庞大患者群体和大量临床试验。中国首个 CAR-T 产品于 2021 年获批，比美国晚 4 年，但目前试验数量全球领先，更大的制造规模也有助于降低成本。</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#f59e0b; text-transform:uppercase; margin-bottom:12px;">
+          <span class="en-only">Medical tourism outlook</span>
+          <span class="cn-only">医疗旅游前景</span>
+        </div>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="en-only">China has promoted medical tourism for years but still faces obstacles. Growing pharmaceutical capabilities and social media are improving its reputation. Harvey describes Chinese hospitals as medically efficient but less likely than Australian hospitals to provide bedside support, counseling, or social-work services — a gap our coordination service directly addresses.</p>
+        <p style="font-size:14px; color:rgba(255,255,255,0.75); line-height:1.7;" class="cn-only">中国多年来积极推动医疗旅游，但仍面临障碍。不断增长的医药实力和社交媒体正在提升其声誉。Harvey 认为中国医院医疗效率高，但在床边陪护、心理咨询和社工支持方面不如澳大利亚医院——而这正是我们协调服务直接填补的空白。</p>
+      </div>
+
+    </div>
+
+    <!-- Source credit -->
+    <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:28px; text-align:center;">
+      <span class="en-only">Source: Bloomberg News video report · </span>
+      <span class="cn-only">来源：彭博新闻视频报道 · </span>
+      <a href="https://www.youtube.com/watch?v=FPHI7p4ei74&t=1162s" target="_blank" style="color:#5eead4;">Watch on YouTube ↗</a>
+    </p>
+
+  </div>
+</div>
+
+<!-- BREAKTHROUGH ALERT -->
+<div style="background:#f0fdfa; padding:0 40px;">
+<div style="max-width:1100px; margin:0 auto; padding:48px 0;">
+  <div class="alert">
+    <div class="alert-icon">🚨</div>
+    <div>
+      <h3 class="en-only">June 22, 2026 — A World First</h3>
+      <h3 class="cn-only">2026 年 6 月 22 日 — 全球首创</h3>
+      <p class="en-only">China's NMPA approved <strong>Satricabtagene autoleucel (Satri-cel)</strong> — the world's first CAR-T therapy for solid tumors, targeting CLDN18.2+ gastric cancer. This breakthrough is unavailable in the USA, Canada, or Europe. For patients with advanced gastric cancer — significantly more common in Chinese populations — China is the only option.</p>
+      <p class="cn-only">中国 NMPA 批准了 <strong>Satricabtagene autoleucel（Satri-cel）</strong>—— 全球首个针对实体瘤的 CAR-T 疗法，用于 CLDN18.2 阳性胃癌/胃食管交界腺癌。这一突破在美国、加拿大和欧洲均无法获得。对于晚期胃癌患者（在华人群体中发病率显著更高），中国是唯一的选择。</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SERVICE -->
+<div id="service">
+<div class="section">
+  <div class="section-tag en-only">Our Service</div>
+  <div class="section-tag cn-only">我们的服务</div>
+  <h2 class="section-title en-only">End-to-end coordination, both directions</h2>
+  <h2 class="section-title cn-only">双向全程协调服务</h2>
+  <p class="section-sub en-only">We handle everything — from medical record review to on-the-ground coordination in China or North America — so patients and families can focus on treatment.</p>
+  <p class="section-sub cn-only">从病历审阅到全程陪同协调，我们处理所有细节，让患者和家属专注于治疗本身。</p>
+
+  <h3 style="font-size:16px; margin-bottom:20px; color:var(--teal);" class="en-only">Direction A: North America → China</h3>
+  <h3 style="font-size:16px; margin-bottom:20px; color:var(--teal);" class="cn-only">方向 A：北美 → 中国</h3>
+  <div class="steps" style="margin-bottom:48px;">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3 class="en-only">Free assessment</h3>
+      <h3 class="cn-only">免费评估</h3>
+      <p class="en-only">Review medical records, assess eligibility for Chinese CAR-T programs</p>
+      <p class="cn-only">审阅病历，评估是否符合中国 CAR-T 项目资格</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3 class="en-only">Hospital matching</h3>
+      <h3 class="cn-only">医院匹配</h3>
+      <p class="en-only">Identify the best Chinese hospital for the patient's diagnosis and needs</p>
+      <p class="cn-only">根据患者诊断和需求推荐最适合的中国医院</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3 class="en-only">Record translation</h3>
+      <h3 class="cn-only">病历翻译</h3>
+      <p class="en-only">Full medical record translation and submission to the Chinese hospital team</p>
+      <p class="cn-only">完整病历翻译并提交给中国医疗团队</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <h3 class="en-only">Logistics</h3>
+      <h3 class="cn-only">行程安排</h3>
+      <p class="en-only">Visa, flights, accommodation, airport transfer, and on-the-ground support</p>
+      <p class="cn-only">签证、机票、住宿、接机及全程陪同支持</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <h3 class="en-only">Follow-up</h3>
+      <h3 class="cn-only">回国随访</h3>
+      <p class="en-only">Coordinate with Canadian/US oncologist for ongoing monitoring after return</p>
+      <p class="cn-only">协调加拿大/美国肿瘤科医生进行回国后的持续随访监测</p>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px; margin-bottom:20px; color:var(--blue);" class="en-only">Direction B: China → North America</h3>
+  <h3 style="font-size:16px; margin-bottom:20px; color:var(--blue);" class="cn-only">方向 B：中国 → 北美</h3>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num" style="background:var(--blue)">1</div>
+      <h3 class="en-only">Case review</h3>
+      <h3 class="cn-only">病例审阅</h3>
+      <p class="en-only">Assess eligibility for FDA-approved products or North American clinical trials</p>
+      <p class="cn-only">评估是否符合 FDA 批准产品或北美临床试验资格</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:var(--blue)">2</div>
+      <h3 class="en-only">Hospital matching</h3>
+      <h3 class="cn-only">医院匹配</h3>
+      <p class="en-only">Connect with MD Anderson, MSK, Princess Margaret, or Fred Hutchinson</p>
+      <p class="cn-only">对接 MD Anderson、纪念斯隆-凯特琳、玛格丽特公主或 Fred Hutchinson 癌症中心</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:var(--blue)">3</div>
+      <h3 class="en-only">Translation</h3>
+      <h3 class="cn-only">病历翻译</h3>
+      <p class="en-only">Complete translation of Chinese medical records into English</p>
+      <p class="cn-only">将中文病历完整翻译成英文</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num" style="background:var(--blue)">4</div>
+      <h3 class="en-only">Full coordination</h3>
+      <h3 class="cn-only">全程协调</h3>
+      <p class="en-only">Visa support, travel coordination, interpreter, and return follow-up</p>
+      <p class="cn-only">签证协助、行程协调、全程翻译及回国随访安排</p>
+    </div>
+  </div>
+
+  <!-- Revenue model -->
+  <h2 class="section-title en-only" style="margin-top:64px;">Revenue model</h2>
+  <h2 class="section-title cn-only" style="margin-top:64px;">收入模式</h2>
+  <div class="revenue-grid" style="margin-top:24px;">
+    <div class="rev-card">
+      <div class="amount">Free</div>
+      <div class="label en-only">Initial consultation</div>
+      <div class="label cn-only">初步咨询</div>
+      <div class="note en-only">Lead generation</div>
+      <div class="note cn-only">引流获客</div>
+    </div>
+    <div class="rev-card">
+      <div class="amount">$1K</div>
+      <div class="label en-only">Case assessment</div>
+      <div class="label cn-only">病例评估报告</div>
+      <div class="note en-only">Written recommendation</div>
+      <div class="note cn-only">书面推荐方案</div>
+    </div>
+    <div class="rev-card">
+      <div class="amount">$10K</div>
+      <div class="label en-only">Full coordination</div>
+      <div class="label cn-only">全程协调服务</div>
+      <div class="note en-only">End-to-end per case</div>
+      <div class="note cn-only">端到端全案服务</div>
+    </div>
+    <div class="rev-card">
+      <div class="amount">5–10%</div>
+      <div class="label en-only">Hospital referral</div>
+      <div class="label cn-only">医院转介费</div>
+      <div class="note en-only">Paid by partner hospitals</div>
+      <div class="note cn-only">由合作医院支付</div>
+    </div>
+    <div class="rev-card">
+      <div class="amount">$500/mo</div>
+      <div class="label en-only">Follow-up care</div>
+      <div class="label cn-only">随访管理</div>
+      <div class="note en-only">Ongoing coordination</div>
+      <div class="note cn-only">持续监测协调</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DATA -->
+<div id="data" class="chart-bg">
+  <div style="max-width:1100px; margin:0 auto; padding:0 0 40px;">
+    <div class="section-tag en-only">Data Analysis</div>
+    <div class="section-tag cn-only">数据分析</div>
+    <h2 class="section-title en-only">2,913 real trials. The numbers don't lie.</h2>
+    <h2 class="section-title cn-only">2,913 条真实数据。数字不会说谎。</h2>
+    <p class="section-sub en-only">Independent analysis of ClinicalTrials.gov data, pulled directly via API. August 2026.</p>
+    <p class="section-sub cn-only">直接通过 API 从 ClinicalTrials.gov 获取的独立数据分析。2026 年 8 月。</p>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3 class="en-only">CAR-T trial growth by year</h3>
+      <h3 class="cn-only">CAR-T 临床试验年度增长</h3>
+      <p class="sub en-only">20× growth from 2010 to 2025</p>
+      <p class="sub cn-only">2010 年至 2025 年增长 20 倍</p>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3 class="en-only">Trials by country</h3>
+      <h3 class="cn-only">各国试验数量</h3>
+      <p class="sub en-only">China overtook the USA as the #1 CAR-T research hub</p>
+      <p class="sub cn-only">中国已超越美国，成为全球第一 CAR-T 研究中心</p>
+      <div class="chart-wrap"><canvas id="countryChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3 class="en-only">Treatment cost comparison (USD)</h3>
+      <h3 class="cn-only">各国治疗费用对比（美元）</h3>
+      <p class="sub en-only">China all-in: $90K vs USA: $600K</p>
+      <p class="sub cn-only">中国全包：9万美元 vs 美国：60万美元</p>
+      <div class="chart-wrap"><canvas id="costChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3 class="en-only">Wait time by country (weeks)</h3>
+      <h3 class="cn-only">各国等待时间（周）</h3>
+      <p class="sub en-only">Canada 18 weeks vs China 3 weeks</p>
+      <p class="sub cn-only">加拿大 18 周 vs 中国 3 周</p>
+      <div class="chart-wrap"><canvas id="waitChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div id="team">
+<div class="section">
+  <div class="section-tag en-only">The Team</div>
+  <div class="section-tag cn-only">团队介绍</div>
+  <h2 class="section-title en-only">Built by someone who knows both worlds</h2>
+  <h2 class="section-title cn-only">由真正懂得两个世界的人创建</h2>
+  <p class="section-sub en-only">Our founder is a PhD biomedical scientist fluent in Mandarin and English, with academic networks spanning China, the USA, and Canada.</p>
+  <p class="section-sub cn-only">我们的创始人拥有生物医学博士学位，中英双语流利，学术人脉横跨中国、美国和加拿大。</p>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="avatar">YL</div>
+      <h3>Yang Liu</h3>
+      <div class="role en-only">Founder</div>
+      <div class="role cn-only">创始人</div>
+      <p class="en-only" style="margin-bottom:16px;">Biomedical PhD researcher with 15+ years in academic labs spanning Shanghai, Nashville, and Winnipeg. Expert in CAR-T data analysis, bilingual in Mandarin and English.</p>
+      <p class="cn-only" style="margin-bottom:16px;">生物医学博士研究员，拥有15年以上跨越上海、纳什维尔和温尼伯的学术实验室经验。CAR-T数据分析专家，中英双语。</p>
+      <div>
+        <span class="credential">PhD Biochemistry</span>
+        <span class="credential">Fudan University</span>
+        <span class="credential">Vanderbilt</span>
+        <span class="credential">U of Manitoba</span>
+        <span class="credential">Mandarin Native</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="avatar" style="background:linear-gradient(135deg,#1d4ed8,#7c3aed)">+</div>
+      <h3 class="en-only">Medical Advisors</h3>
+      <h3 class="cn-only">医学顾问团队</h3>
+      <div class="role en-only">Oncology Network</div>
+      <div class="role cn-only">肿瘤学网络</div>
+      <p class="en-only" style="margin-bottom:16px;">We are building an advisory network of oncologists from partner institutions in China and North America to provide clinical oversight for all cases.</p>
+      <p class="cn-only" style="margin-bottom:16px;">我们正在建立来自中国和北美合作机构的肿瘤科医生顾问网络，为所有案例提供临床监督。</p>
+      <div>
+        <span class="credential">PLA General Hospital</span>
+        <span class="credential">Fudan Cancer</span>
+        <span class="credential">CancerCare MB</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="avatar" style="background:linear-gradient(135deg,#d97706,#dc2626)">!</div>
+      <h3 class="en-only">Why us?</h3>
+      <h3 class="cn-only">为什么选择我们？</h3>
+      <div class="role en-only">Unique Advantage</div>
+      <div class="role cn-only">独特优势</div>
+      <p class="en-only" style="margin-bottom:16px;">The only CAR-T coordination service with a clinical PhD, native Mandarin, real-time trial data analysis, and academic networks in both China and North America.</p>
+      <p class="cn-only" style="margin-bottom:16px;">全球唯一集临床博士学位、普通话母语、实时试验数据分析能力及中美双边学术人脉于一体的 CAR-T 专业协调服务。</p>
+      <div>
+        <span class="credential">PhD Clinical Expertise</span>
+        <span class="credential">Bilingual</span>
+        <span class="credential">Data-backed</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="contact-bg">
+  <h2 class="en-only">Ready to learn more?</h2>
+  <h2 class="cn-only">想进一步了解？</h2>
+  <p class="en-only">Whether you're a patient, investor, or potential hospital partner — we'd love to connect.</p>
+  <p class="cn-only">无论您是患者、投资人还是潜在合作医院，我们都欢迎您与我们联系。</p>
+  <div class="contact-grid">
+    <a class="contact-item" href="mailto:liuyang6093@gmail.com">
+      <span class="en-only">Email</span>
+      <span class="cn-only">电子邮件</span>
+      liuyang6093@gmail.com
+    </a>
+    <a class="contact-item" href="tel:+14315540238">
+      <span class="en-only">Phone</span>
+      <span class="cn-only">电话</span>
+      +1 (431) 554-0238
+    </a>
+    <a class="contact-item" href="https://www.linkedin.com/in/yang-liu-6093/" target="_blank">
+      <span>LinkedIn</span>
+      yang-liu-6093
+    </a>
+    <a class="contact-item" href="https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/" target="_blank">
+      <span class="en-only">Data Report</span>
+      <span class="cn-only">数据报告</span>
+      View live analysis
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">CART<span>Bridge</span> Health</div>
+  <p class="en-only">© 2026 CARTBridge Health · For informational purposes only · Not medical advice</p>
+  <p class="cn-only">© 2026 CARTBridge Health · 仅供参考 · 不构成医疗建议</p>
+</footer>
+
+<script>
+function toggleLang() {
+  document.body.classList.toggle("en");
+  document.body.classList.toggle("cn");
+  closeMenu();
+}
+if (!document.body.classList.contains("cn")) document.body.classList.add("en");
+
+function toggleMenu() {
+  const h = document.getElementById("hamburger");
+  const m = document.getElementById("mobileMenu");
+  h.classList.toggle("open");
+  m.classList.toggle("open");
+}
+function closeMenu() {
+  document.getElementById("hamburger").classList.remove("open");
+  document.getElementById("mobileMenu").classList.remove("open");
+}
+
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size   = 12;
+Chart.defaults.color       = "#64748b";
+
+const TEAL = "#0d9488", RED = "#dc2626", BLUE = "#1d4ed8", GRAY = "#94a3b8";
+
+new Chart(document.getElementById("trendChart"), {
+  type: "line",
+  data: {
+    labels: [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets: [{ label: "Trials", data: [8,12,18,22,28,45,68,120,178,210,245,290,355,390,410,435],
+      borderColor: TEAL, backgroundColor: "rgba(13,148,136,0.08)",
+      borderWidth: 2.5, pointRadius: 3, fill: true, tension: 0.4 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+    scales:{ x:{grid:{display:false},border:{display:false}}, y:{grid:{color:"#f1f5f9"},border:{display:false}} } }
+});
+
+new Chart(document.getElementById("countryChart"), {
+  type: "bar",
+  data: {
+    labels: ["China","USA","UK","France","Germany","Canada","Australia","Japan"],
+    datasets: [{ data: [1900,1030,360,290,230,200,180,160],
+      backgroundColor: ["#dc2626","#1d4ed8","#94a3b8","#94a3b8","#94a3b8","#94a3b8","#94a3b8","#94a3b8"],
+      borderRadius: 5 }]
+  },
+  options: { indexAxis:"y", responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ x:{grid:{color:"#f1f5f9"},border:{display:false}}, y:{grid:{display:false},border:{display:false}} } }
+});
+
+new Chart(document.getElementById("costChart"), {
+  type: "bar",
+  data: {
+    labels: ["India","China","Japan","UK","Canada","Germany","USA"],
+    datasets: [{ data: [55000,90000,290000,320000,310000,360000,600000],
+      backgroundColor: ["#0d9488","#0d9488","#94a3b8","#94a3b8","#94a3b8","#94a3b8","#dc2626"],
+      borderRadius: 5 }]
+  },
+  options: { indexAxis:"y", responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${(ctx.raw/1000).toFixed(0)}K`}}},
+    scales:{ x:{grid:{color:"#f1f5f9"},border:{display:false}}, y:{grid:{display:false},border:{display:false}} } }
+});
+
+new Chart(document.getElementById("waitChart"), {
+  type: "bar",
+  data: {
+    labels: ["China","India","Japan","Germany","UK","USA","Canada"],
+    datasets: [{ data: [3,4,6,8,10,12,18],
+      backgroundColor: ["#0d9488","#0d9488","#94a3b8","#94a3b8","#94a3b8","#94a3b8","#dc2626"],
+      borderRadius: 5 }]
+  },
+  options: { indexAxis:"y", responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} weeks`}}},
+    scales:{ x:{grid:{color:"#f1f5f9"},border:{display:false}}, y:{grid:{display:false},border:{display:false}} } }
+});
+</script>
+</body>
+</html>
