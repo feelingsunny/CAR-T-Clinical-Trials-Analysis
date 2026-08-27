@@ -1,34 +1,48 @@
 # CAR-T Clinical Trials & Treatment Analysis Pipeline
 
-An end-to-end data analysis pipeline examining **2,913 real-world CAR-T (Chimeric Antigen Receptor T-cell) clinical trials** and **global treatment availability** across 7 countries, combining SQL database design, Python data engineering, and Power BI visualization.
+[![Monthly Data Update](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml/badge.svg)](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml)
+[![Deploy to Pages](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml/badge.svg)](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml)
+
+An end-to-end data pipeline analyzing **2,913 real-world CAR-T clinical trials** and **global treatment availability** across 7 countries — combining SQL database design, Python data engineering, Power BI visualization, and interactive web publishing.
 
 ---
 
-## Project Background
+## 🌐 Live Websites
 
-CAR-T therapy is one of the fastest-growing areas in oncology. This project has two modules:
+| Site | URL |
+|---|---|
+| 📊 Data Analysis | [feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/) |
+| 💼 Investor Presentation | [feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/investor.html](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/investor.html) |
 
-**Module 1 — Clinical Trials Analysis**
-Analyzes global CAR-T trial trends across cancer types, trial phases, and geographic distribution using data from ClinicalTrials.gov.
+---
 
-**Module 2 — Global Treatment Comparison**
-Compares CAR-T treatment availability, cost, wait times, and approved products across USA, China, Canada, Germany, UK, Japan, and India — answering the question: *Why are cancer patients flying to China for CAR-T treatment?*
+## 🔄 Automated Monthly Updates
+
+This repository uses **GitHub Actions** to automatically refresh all data on the 1st of every month:
+
+- Fetches latest CAR-T trials from ClinicalTrials.gov API
+- Standardizes phase labels and cleans data
+- Updates treatment cost and product comparison data
+- Commits and pushes updated CSV files to the repository
+- GitHub Pages website updates automatically
+
+**No manual intervention required.**
 
 ---
 
 ## Key Findings
 
-### Clinical Trials (2,913 records)
-- CAR-T trial volume grew **20x** between 2010 and 2025
+### Clinical Trials (2,913 records · August 2026)
+- CAR-T trial volume grew **20×** between 2010 and 2025
 - China leads globally with **~1,900 trials**, followed by the US (~1,000)
-- Phase 1 trials dominate (1,125 trials), reflecting the field's early-stage nature
-- 35% of trials are actively recruiting, showing continued rapid expansion
+- Phase 1 trials dominate (1,125), reflecting the field's early-stage nature
+- 35% of trials are actively recruiting — field still in rapid expansion
 
 ### Global Treatment Comparison (July 2026)
 - China has **9 NMPA-approved products** — more than any other country
-- China total treatment cost: **$50,000–$80,000** vs USA $488,000–$760,000
+- China total all-in cost: **$50,000–$80,000** vs USA $488,000–$760,000
 - China average wait time: **2–3 weeks** vs USA 12 weeks, Canada 18 weeks
-- 🚨 **World first**: China approved Satri-cel (June 22, 2026) — the first CAR-T therapy for solid tumors (gastric cancer), not yet available anywhere else
+- 🚨 **World first**: China approved Satri-cel (June 22, 2026) — first CAR-T for solid tumors (gastric cancer), not yet available anywhere else
 
 ---
 
@@ -40,6 +54,8 @@ Compares CAR-T treatment availability, cost, wait times, and approved products a
 | SQL | Joins, aggregations, window functions, ETL |
 | Data pipeline | Python, Pandas, Requests |
 | Visualization | Power BI Desktop |
+| Web | HTML, CSS, Chart.js (interactive, bilingual) |
+| Automation | GitHub Actions (monthly cron) |
 | Version control | Git / GitHub |
 
 ---
@@ -48,22 +64,28 @@ Compares CAR-T treatment availability, cost, wait times, and approved products a
 
 ```
 CAR-T-Clinical-Trials-Analysis/
+├── .github/
+│   └── workflows/
+│       ├── static.yml              # GitHub Pages auto-deploy
+│       └── monthly_update.yml      # Monthly data refresh (1st of each month)
 ├── data/
-│   ├── cart_trials_raw.json           # Raw API response (2,913 records)
-│   ├── cart_trials_clean.csv          # Cleaned trials dataset
-│   ├── approved_products.csv          # FDA & NMPA approved products (2026)
-│   ├── cost_comparison.csv            # Treatment costs by country (2026)
-│   └── treatment_centers.csv          # Top CAR-T hospitals worldwide
+│   ├── cart_trials_raw.json        # Raw API response (2,913 records)
+│   ├── cart_trials_clean.csv       # Cleaned trials dataset (auto-updated)
+│   ├── approved_products.csv       # FDA & NMPA approved products (2026)
+│   ├── cost_comparison.csv         # Treatment costs by country (2026)
+│   └── treatment_centers.csv       # Top CAR-T hospitals worldwide
 ├── sql/
-│   └── queries.sql                    # 6 analysis queries
+│   └── queries.sql                 # 6 analysis queries
 ├── python/
-│   ├── fetch_cart_data.py             # Pull data from ClinicalTrials.gov API
-│   ├── generate_mock_data.py          # Mock data generator
-│   ├── fix_phase_labels.py            # Phase label standardization
-│   ├── collect_treatment_data.py      # Treatment comparison data
+│   ├── fetch_cart_data.py          # Pull data from ClinicalTrials.gov API
+│   ├── generate_mock_data.py       # Mock data generator for local dev
+│   ├── fix_phase_labels.py         # Phase label standardization
+│   ├── collect_treatment_data.py   # Treatment comparison data
 │   └── update_treatment_data_2026.py  # Latest 2026 data update
 ├── dashboard/
-│   └── cart_trials_dashboard.pbix     # Power BI (2 pages)
+│   └── cart_trials_dashboard.pbix  # Power BI dashboard (2 pages)
+├── index.html                      # Data analysis website
+├── investor.html                   # Investor presentation website (bilingual)
 └── README.md
 ```
 
@@ -74,32 +96,18 @@ CAR-T-Clinical-Trials-Analysis/
 ### Page 1 — Clinical Trials Analysis
 | Chart | Type | Key Insight |
 |---|---|---|
-| CAR-T Trial Growth by Year | Line chart | 20x growth 2010–2025 |
+| CAR-T Trial Growth by Year | Line chart | 20× growth 2010–2025 |
 | Trials by Country | Bar chart | China #1, USA #2 |
 | Trial Status Distribution | Pie chart | 35% actively recruiting |
-| Average Enrollment by Phase | Bar chart | Phase 3 highest enrollment |
+| Average Enrollment by Phase | Bar chart | Phase 3 highest enrollment (~320 patients) |
 
 ### Page 2 — Global Treatment Comparison
 | Chart | Type | Key Insight |
 |---|---|---|
 | Total Cost by Country | Bar chart | USA $600K vs China $90K |
-| Wait Time by Country | Bar chart | Canada 18wks vs China 3wks |
+| Wait Time by Country | Bar chart | Canada 18 wks vs China 3 wks |
 | Approved Products by Country | Bar chart | China leads with 9 products |
-| Top Treatment Centers | Table | 10 hospitals, costs, wait times |
-
----
-
-## Database Schema
-
-5 normalized PostgreSQL tables:
-
-```
-trials          — core trial info (status, phase, enrollment, sponsor)
-conditions      — cancer types per trial (one-to-many)
-interventions   — CAR-T products per trial (one-to-many)
-locations       — countries per trial (one-to-many)
-eligibility     — patient criteria (age, gender, pediatric flag)
-```
+| Top Treatment Centers | Table | 10 hospitals with costs and wait times |
 
 ---
 
@@ -107,7 +115,7 @@ eligibility     — patient criteria (age, gender, pediatric flag)
 
 | Query | Technique | Key Finding |
 |---|---|---|
-| Trial growth by year | GROUP BY, aggregation | 20x growth 2010–2025 |
+| Trial growth by year | GROUP BY, aggregation | 20× growth 2010–2025 |
 | Trials by cancer type | JOIN, AVG | B-cell malignancies most studied |
 | Completion rate by phase | CASE WHEN, percentage | Phase 2 highest completion rate |
 | Geographic distribution | JOIN, COUNT | China #1, US #2 |
@@ -116,9 +124,9 @@ eligibility     — patient criteria (age, gender, pediatric flag)
 
 ---
 
-## How to Run
+## How to Run Locally
 
-### Fetch real clinical trials data
+### Fetch real data
 ```bash
 pip install requests pandas
 python python/fetch_cart_data.py
@@ -137,15 +145,26 @@ CREATE DATABASE cart_trials;
 -- paste contents of sql/queries.sql
 ```
 
+### Run monthly update manually
+Go to **Actions** → **Monthly CAR-T Data Update** → **Run workflow**
+
 ---
 
 ## Data Sources
 
-- **Clinical Trials**: [ClinicalTrials.gov](https://clinicaltrials.gov) API v2 — retrieved August 2026
+- **Clinical Trials**: [ClinicalTrials.gov](https://clinicaltrials.gov) API v2 — auto-updated monthly
 - **FDA Approvals**: U.S. Food & Drug Administration
 - **NMPA Approvals**: China National Medical Products Administration
 - **Treatment Costs**: Published medical literature and hospital websites (2026)
 - **Satri-cel approval**: CARsgen press release, June 22, 2026
+
+---
+
+## Business Application
+
+This analysis underpins **CARTBridge Health** — a cross-border CAR-T medical coordination service connecting North American cancer patients with top treatment centers in China, and Chinese patients seeking FDA-approved products in North America.
+
+🌐 [View Investor Presentation](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/investor.html)
 
 ---
 
@@ -155,4 +174,4 @@ CREATE DATABASE cart_trials;
 Research Associate, University of Manitoba
 Biomedical researcher with expertise in microfluidics, point-of-care diagnostics, and data analysis
 
-[LinkedIn](https://www.linkedin.com/in/yang-liu-6093/) | [GitHub](https://github.com/feelingsunny)
+[LinkedIn](https://www.linkedin.com/in/yang-liu-6093/) · [GitHub](https://github.com/feelingsunny) · liuyang6093@gmail.com
