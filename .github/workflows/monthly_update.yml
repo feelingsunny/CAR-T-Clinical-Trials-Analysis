@@ -1,0 +1,49 @@
+name: Monthly CAR-T Data Update
+
+on:
+  # Run automatically on the 1st of every month at 8:00 AM UTC
+  schedule:
+    - cron: '0 8 1 * *'
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      # 4. Fetch latest CAR-T trial data from ClinicalTrials.gov
+      - name: Fetch real CAR-T data
+        run: python python/fetch_cart_data.py
+
+      # 5. Fix phase labels
+      - name: Fix phase labels
+        run: python python/fix_phase_labels.py
+
+      # 6. Update treatment comparison data
+      - name: Update treatment data
+        run: python python/update_treatment_data_2026.py
+
+      # 7. Commit and push updated CSV files
+      - name: Commit updated data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Auto update: CAR-T data refresh $(date +'%B %Y')"
+          git push
