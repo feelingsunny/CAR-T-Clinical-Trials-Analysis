@@ -425,6 +425,8 @@ body.en .cn-only { display: none; }
     <a href="#problem" class="cn-only">痛点</a>
     <a href="#service" class="en-only">Service</a>
     <a href="#service" class="cn-only">服务</a>
+    <a href="#products" class="en-only">Products</a>
+    <a href="#products" class="cn-only">产品</a>
     <a href="#data" class="en-only">Data</a>
     <a href="#data" class="cn-only">数据</a>
     <a href="#team" class="en-only">Team</a>
@@ -444,6 +446,8 @@ body.en .cn-only { display: none; }
   <a href="#problem" onclick="closeMenu()" class="cn-only">痛点</a>
   <a href="#service" onclick="closeMenu()" class="en-only">Service</a>
   <a href="#service" onclick="closeMenu()" class="cn-only">服务</a>
+  <a href="#products" onclick="closeMenu()" class="en-only">Products</a>
+  <a href="#products" onclick="closeMenu()" class="cn-only">产品</a>
   <a href="#data" onclick="closeMenu()" class="en-only">Data</a>
   <a href="#data" onclick="closeMenu()" class="cn-only">数据</a>
   <a href="#team" onclick="closeMenu()" class="en-only">Team</a>
@@ -818,6 +822,193 @@ body.en .cn-only { display: none; }
 </div>
 </div>
 
+<!-- PRODUCT STRATEGY -->
+<div id="products" style="background:#f8fafb; padding:80px 40px;">
+<div style="max-width:1100px; margin:0 auto;">
+  <div class="section-tag en-only">Product Strategy</div>
+  <div class="section-tag cn-only">产品策略</div>
+  <h2 class="section-title en-only">CAR-T Drug Prioritization for Patients</h2>
+  <h2 class="section-title cn-only">面向患者的 CAR-T 药物优先级框架</h2>
+  <p class="section-sub en-only">All NMPA-approved CAR-T products are available through our China coordination service. Products are ranked by clinical evidence, regulatory maturity, and strategic fit for our patient population.</p>
+  <p class="section-sub cn-only">所有NMPA已批准的CAR-T产品均可通过我们的中国协调服务获取。产品按临床证据、监管成熟度和患者群体匹配度进行优先级排序。</p>
+
+  <!-- Priority tabs -->
+  <div class="filters" style="margin-bottom:32px;">
+    <button class="pill active" onclick="showPriority('all', this)" class="en-only">All Products</button>
+    <button class="pill" onclick="showPriority('p1', this)">Priority 1 🟢</button>
+    <button class="pill" onclick="showPriority('p2', this)">Priority 2 🟡</button>
+    <button class="pill" onclick="showPriority('p3', this)">Priority 3 🔴</button>
+    <button class="pill" onclick="showPriority('p4', this)">Priority 4 ⚪</button>
+  </div>
+
+  <!-- Priority 1 -->
+  <div class="priority-group" id="pg-p1">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #d1fae5;">
+      <span style="font-size:11px; font-weight:700; letter-spacing:2px; color:#166534; text-transform:uppercase;">Priority 1 🟢</span>
+      <span class="en-only" style="font-size:14px; color:var(--muted);">CD19 CAR-T · B-cell Lymphoma · Strongest evidence · First recommendation</span>
+      <span class="cn-only" style="font-size:14px; color:var(--muted);">CD19 CAR-T · B细胞淋巴瘤 · 证据最充分 · 首选推荐</span>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(440px, 1fr)); gap:20px;">
+      <div class="chart-card" style="border-left:4px solid #10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
+          <div>
+            <div class="chart-title">奕凯达® (Yescarta)</div>
+            <div class="chart-sub en-only">Axicabtagene ciloleucel · Fosun Kite · CD19</div>
+            <div class="chart-sub cn-only">阿基仑赛注射液 · 复星凯特 · CD19</div>
+          </div>
+          <span style="background:#d1fae5; color:#065f46; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 83%</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">DLBCL, FL, MCL</strong><strong class="cn-only">大B细胞淋巴瘤、滤泡性淋巴瘤、MCL</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.2M (~$165K)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2021</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">USA price: </span><span style="color:var(--muted);" class="cn-only">美国价格：</span><strong style="color:#dc2626;">$373,000</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Patients treated: </span><span style="color:var(--muted);" class="cn-only">治疗患者数：</span><strong>1,500+ (China)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Mfg time: </span><span style="color:var(--muted);" class="cn-only">制造周期：</span><strong>~14 days / 天</strong></div>
+        </div>
+        <div style="margin-top:14px; padding:10px 14px; background:#f0fdfa; border-radius:8px; font-size:12px; color:#0f766e;">
+          <span class="en-only">⭐ First choice — longest track record in China, broadest indications</span>
+          <span class="cn-only">⭐ 首选 —— 中国使用时间最长、适应症最广</span>
+        </div>
+      </div>
+      <div class="chart-card" style="border-left:4px solid #10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
+          <div>
+            <div class="chart-title">倍诺达® (Relma-cel)</div>
+            <div class="chart-sub en-only">Relmacabtagene autoleucel · JW Therapeutics · CD19</div>
+            <div class="chart-sub cn-only">瑞基奥仑赛注射液 · 药明巨诺 · CD19</div>
+          </div>
+          <span style="background:#d1fae5; color:#065f46; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 80%</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">DLBCL, MCL (post-BTKi)</strong><strong class="cn-only">DLBCL、MCL（BTKi后）</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.29M (~$177K)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2021</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">USA equivalent: </span><span style="color:var(--muted);" class="cn-only">美国同类：</span><strong style="color:#dc2626;">Not available</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Unique advantage: </span><span style="color:var(--muted);" class="cn-only">独特优势：</span><strong class="en-only">MCL post-BTKi</strong><strong class="cn-only">BTKi后MCL唯一选择</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Mfg time: </span><span style="color:var(--muted);" class="cn-only">制造周期：</span><strong>~14 days / 天</strong></div>
+        </div>
+        <div style="margin-top:14px; padding:10px 14px; background:#f0fdfa; border-radius:8px; font-size:12px; color:#0f766e;">
+          <span class="en-only">⭐ MCL specialist — unique post-BTKi indication, not available in USA</span>
+          <span class="cn-only">⭐ MCL专项 —— BTKi后适应症独特，美国无此产品</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 2 -->
+  <div class="priority-group" id="pg-p2" style="margin-top:40px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #fef3c7;">
+      <span style="font-size:11px; font-weight:700; letter-spacing:2px; color:#92400e; text-transform:uppercase;">Priority 2 🟡</span>
+      <span class="en-only" style="font-size:14px; color:var(--muted);">BCMA CAR-T · Multiple Myeloma · Strong data · Second recommendation</span>
+      <span class="cn-only" style="font-size:14px; color:var(--muted);">BCMA CAR-T · 多发性骨髓瘤 · 数据强劲 · 次选推荐</span>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(440px, 1fr)); gap:20px;">
+      <div class="chart-card" style="border-left:4px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
+          <div>
+            <div class="chart-title">卡卫荻® (Carvykti)</div>
+            <div class="chart-sub en-only">Ciltacabtagene autoleucel · Legend Biotech / Janssen · BCMA</div>
+            <div class="chart-sub cn-only">西达基奥仑赛注射液 · 传奇生物/强生 · BCMA</div>
+          </div>
+          <span style="background:#fef3c7; color:#92400e; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 98%</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">Multiple Myeloma (3L+)</strong><strong class="cn-only">多发性骨髓瘤（三线以上）</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.15M (~$158K)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">CR rate: </span><span style="color:var(--muted);" class="cn-only">完全缓解率：</span><strong>78% (CARTITUDE-1)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">USA price: </span><span style="color:var(--muted);" class="cn-only">美国价格：</span><strong style="color:#dc2626;">$465,000</strong></div>
+        </div>
+        <div style="margin-top:14px; padding:10px 14px; background:#fffbeb; border-radius:8px; font-size:12px; color:#92400e;">
+          <span class="en-only">⭐ Best-in-class BCMA globally · Same product as US CARVYKTI · Save $307K</span>
+          <span class="cn-only">⭐ 全球BCMA最优数据 · 与美国CARVYKTI同款 · 节省约30.7万美元</span>
+        </div>
+      </div>
+      <div class="chart-card" style="border-left:4px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
+          <div>
+            <div class="chart-title">福可苏® (Fucaso)</div>
+            <div class="chart-sub en-only">Equecabtagene autoleucel · Iaso Bio / Innovent · BCMA</div>
+            <div class="chart-sub cn-only">伊基奥仑赛注射液 · 驯鹿生物/信达生物 · BCMA</div>
+          </div>
+          <span style="background:#fef3c7; color:#92400e; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 96%</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">Multiple Myeloma (3L+)</strong><strong class="cn-only">多发性骨髓瘤（三线以上）</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.166M (~$160K)</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2023</strong></div>
+          <div><span style="color:var(--muted);" class="en-only">USA equivalent: </span><span style="color:var(--muted);" class="cn-only">美国同类：</span><strong style="color:#dc2626;">Not available</strong></div>
+        </div>
+        <div style="margin-top:14px; padding:10px 14px; background:#fffbeb; border-radius:8px; font-size:12px; color:#92400e;">
+          <span class="en-only">⭐ Domestic China product · Wide hospital network · Alternative when Carvykti unavailable</span>
+          <span class="cn-only">⭐ 国产产品 · 医院网络覆盖广 · 卡卫荻不可及时的首选备选</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 3 -->
+  <div class="priority-group" id="pg-p3" style="margin-top:40px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #fee2e2;">
+      <span style="font-size:11px; font-weight:700; letter-spacing:2px; color:#991b1b; text-transform:uppercase;">Priority 3 🔴</span>
+      <span class="en-only" style="font-size:14px; color:var(--muted);">CLDN18.2 CAR-T · Gastric Cancer · World First · China Only</span>
+      <span class="cn-only" style="font-size:14px; color:var(--muted);">CLDN18.2 CAR-T · 胃癌 · 全球首创 · 仅中国可及</span>
+    </div>
+    <div class="chart-card" style="border-left:4px solid #dc2626; background:linear-gradient(135deg, #fff 0%, #fff5f5 100%);">
+      <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <div class="chart-title" style="font-size:18px;">恺力美® (Satri-cel) 🌍</div>
+          <div class="chart-sub en-only">Satricabtagene autoleucel · CARsgen · CLDN18.2 · Approved June 22, 2026</div>
+          <div class="chart-sub cn-only">舒瑞基奥仑赛注射液 · 科济药业 · CLDN18.2 · 2026年6月22日获批</div>
+        </div>
+        <span style="background:#fee2e2; color:#991b1b; font-size:12px; font-weight:700; padding:6px 14px; border-radius:10px;">World First 全球首创</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:13px; margin-bottom:16px;">
+        <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">CLDN18.2+ HER2− Gastric / GEJ Cancer (2L+)</strong><strong class="cn-only">CLDN18.2阳性HER2阴性晚期胃癌/GEJ（二线以上）</strong></div>
+        <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong class="en-only">TBD (newly approved)</strong><strong class="cn-only">待定（刚获批）</strong></div>
+        <div><span style="color:var(--muted);" class="en-only">PFS improvement: </span><span style="color:var(--muted);" class="cn-only">PFS改善：</span><strong>3.25m vs 1.77m (HR 0.37)</strong></div>
+        <div><span style="color:var(--muted);" class="en-only">Global status: </span><span style="color:var(--muted);" class="cn-only">全球状态：</span><strong style="color:#dc2626;" class="en-only">China ONLY</strong><strong style="color:#dc2626;" class="cn-only">仅中国可及</strong></div>
+        <div><span style="color:var(--muted);" class="en-only">Evidence: </span><span style="color:var(--muted);" class="cn-only">临床证据：</span><strong class="en-only">The Lancet (2025)</strong><strong class="cn-only">《柳叶刀》发表（2025年）</strong></div>
+        <div><span style="color:var(--muted);" class="en-only">Manufacturer: </span><span style="color:var(--muted);" class="cn-only">生产商：</span><strong>CARsgen 科济药业</strong></div>
+      </div>
+      <div style="padding:14px 16px; background:#fff0f0; border-radius:8px; font-size:13px; color:#991b1b; line-height:1.6;">
+        <span class="en-only">🚨 <strong>Breakthrough opportunity:</strong> No other country offers this therapy. Gastric cancer accounts for 40% of global cases in East Asia — directly matching our Chinese diaspora patient base. CARTBridge Health is uniquely positioned to coordinate access to this world-first treatment.</span>
+        <span class="cn-only">🚨 <strong>突破性机遇：</strong>全球无其他国家提供此疗法。胃癌占全球病例的40%在东亚地区，与我们的华人患者群体高度重合。CARTBridge Health 具备独特优势，可为患者协调获取这一全球首创疗法。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority 4 -->
+  <div class="priority-group" id="pg-p4" style="margin-top:40px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid var(--border);">
+      <span style="font-size:11px; font-weight:700; letter-spacing:2px; color:var(--muted); text-transform:uppercase;">Priority 4 ⚪</span>
+      <span class="en-only" style="font-size:14px; color:var(--muted);">FDA-Approved · USA Access (Direction B) · Special cases only</span>
+      <span class="cn-only" style="font-size:14px; color:var(--muted);">FDA批准 · 美国可及（方向B）· 仅特殊情况推荐</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th class="en-only">Product</th><th class="cn-only">产品</th>
+            <th>Target / 靶点</th>
+            <th class="en-only">Indication</th><th class="cn-only">适应症</th>
+            <th class="en-only">US Price</th><th class="cn-only">美国价格</th>
+            <th class="en-only">Best for</th><th class="cn-only">适合人群</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Yescarta (阿基仑赛)</td><td>CD19</td><td>DLBCL, FL, MCL</td><td style="color:#dc2626;font-weight:600">$373,000</td><td class="en-only">Needs FDA label</td><td class="cn-only">需要FDA标签</td></tr>
+          <tr><td>Kymriah (替沙仑赛)</td><td>CD19</td><td class="en-only">Pediatric ALL, DLBCL</td><td class="cn-only">儿科ALL</td><td style="color:#dc2626;font-weight:600">$475,000</td><td class="en-only">Pediatric ALL only</td><td class="cn-only">儿科ALL唯一FDA选择</td></tr>
+          <tr><td>Carvykti (西达基奥仑赛)</td><td>BCMA</td><td class="en-only">Multiple Myeloma</td><td class="cn-only">多发性骨髓瘤</td><td style="color:#dc2626;font-weight:600">$465,000</td><td class="en-only">Continuity from China</td><td class="cn-only">中国治疗后续随访</td></tr>
+          <tr><td>Breyanzi (利索仑赛)</td><td>CD19</td><td class="en-only">DLBCL, CLL, MCL, FL</td><td class="cn-only">DLBCL、CLL</td><td style="color:#dc2626;font-weight:600">$410,300</td><td class="en-only">CLL — broader than China</td><td class="cn-only">CLL适应症更广</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
 <!-- DATA -->
 <div id="data" class="chart-bg">
   <div style="max-width:1100px; margin:0 auto; padding:0 0 40px;">
@@ -955,6 +1146,19 @@ body.en .cn-only { display: none; }
 </footer>
 
 <script>
+function showPriority(p, btn) {
+  document.querySelectorAll("#products .pill").forEach(x => x.classList.remove("active"));
+  btn.classList.add("active");
+  const groups = document.querySelectorAll(".priority-group");
+  groups.forEach(g => {
+    if (p === "all") {
+      g.style.display = "";
+    } else {
+      g.style.display = g.id === "pg-" + p ? "" : "none";
+    }
+  });
+}
+
 function toggleLang() {
   document.body.classList.toggle("en");
   document.body.classList.toggle("cn");
