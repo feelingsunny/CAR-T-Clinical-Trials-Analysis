@@ -20,8 +20,8 @@
   --gold:    #d97706;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--paper); color: var(--ink); overflow-x: hidden; }
 
 /* ── NAV ── */
 nav {
@@ -192,7 +192,7 @@ nav {
 .chart-bg { background: #f8fafb; padding: 60px 40px; }
 .chart-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
   gap: 24px; max-width: 1100px; margin: 0 auto;
 }
 .chart-card {
@@ -206,7 +206,7 @@ nav {
 /* ── TEAM ── */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 24px;
 }
 .team-card {
@@ -341,11 +341,14 @@ body.en .cn-only { display: none; }
   .team-grid { grid-template-columns: 1fr; }
   .chart-grid { grid-template-columns: 1fr; }
   .contact-bg { padding: 56px 24px; }
+  /* Product cards */
+  .priority-group [style*="minmax(440px"] { grid-template-columns: 1fr !important; }
+  .priority-group > div[style*="grid"] { grid-template-columns: 1fr !important; }
 }
 
 /* ── MOBILE (480px) ── */
 @media (max-width: 480px) {
-  /* Nav: hide links, show hamburger */
+  /* Nav */
   .nav-links { display: none; }
   .hamburger { display: flex; }
 
@@ -353,65 +356,100 @@ body.en .cn-only { display: none; }
   .hero { padding: 56px 20px 48px; text-align: left; }
   .hero-tag { font-size: 10px; }
   .hero-sub { font-size: 15px; }
-  .hero-btns { flex-direction: column; align-items: flex-start; }
-  .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; display: block; }
 
   /* Stats: 2 columns */
   .stats { grid-template-columns: repeat(2, 1fr); }
   .stat { padding: 16px 12px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .stat-n { font-size: 24px; }
+  .stat-n { font-size: 22px; }
   .stat-l { font-size: 10px; }
 
   /* Sections */
-  .section { padding: 48px 20px; }
-  .section-title { font-size: 24px; }
-  .section-sub { font-size: 14px; }
+  .section { padding: 40px 16px; }
+  .section-title { font-size: 22px; }
+  .section-sub { font-size: 14px; margin-bottom: 28px; }
 
-  /* Problem cards: single column */
-  .problem-grid { grid-template-columns: 1fr; }
-  .problem-card .big { font-size: 24px; }
+  /* Problem cards */
+  .problem-grid { grid-template-columns: 1fr; gap: 12px; }
+  .problem-card .big { font-size: 22px; }
 
-  /* Comparison table: scrollable */
+  /* Comparison table */
   .cmp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
-  .cmp-table { min-width: 560px; font-size: 12px; }
-  .cmp-table th, .cmp-table td { padding: 10px 12px; }
+  .cmp-table { min-width: 540px; font-size: 12px; }
+  .cmp-table th, .cmp-table td { padding: 10px 10px; }
 
-  /* Video section */
-  .video-section { padding: 48px 20px !important; }
-  .video-section h2 { font-size: 22px !important; }
+  /* Video */
+  .video-section { padding: 40px 16px !important; }
+  .video-section h2 { font-size: 20px !important; }
   .video-section p { font-size: 14px !important; }
   .video-wrap { border-radius: 10px !important; }
 
   /* Alert */
-  .alert { grid-template-columns: 1fr; padding: 28px 20px; gap: 16px; }
-  .alert-icon { font-size: 32px; }
-  .alert h3 { font-size: 17px; }
-  .alert p { font-size: 14px; }
+  .alert { grid-template-columns: 1fr; padding: 24px 16px; gap: 12px; }
+  .alert-icon { font-size: 28px; }
+  .alert h3 { font-size: 16px; }
+  .alert p { font-size: 13px; }
 
-  /* Service steps: single column */
-  .steps { grid-template-columns: 1fr; }
+  /* Steps */
+  .steps { grid-template-columns: 1fr; gap: 12px; }
+  .step-card { padding: 18px; }
 
-  /* Revenue: 2 columns */
-  .revenue-grid { grid-template-columns: repeat(2, 1fr); }
-  .rev-card .amount { font-size: 22px; }
+  /* Revenue */
+  .revenue-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .rev-card { padding: 16px; }
+  .rev-card .amount { font-size: 20px; }
 
   /* Charts */
-  .chart-bg { padding: 48px 20px; }
-  .chart-grid { grid-template-columns: 1fr; gap: 16px; }
-  .chart-wrap { height: 220px !important; }
-  .chart-card { padding: 20px; }
+  .chart-bg { padding: 40px 16px; }
+  .chart-grid { grid-template-columns: 1fr; gap: 14px; }
+  .chart-wrap { height: 210px !important; }
+  .chart-card { padding: 18px; }
+  .chart-card h3 { font-size: 13px; }
+
+  /* Product strategy section */
+  #products { padding: 40px 16px !important; }
+  #products .section-title { font-size: 22px; }
+  #products .section-sub { font-size: 14px; }
+  .filters { gap: 6px; }
+  .pill { padding: 5px 10px; font-size: 11px; }
+  .priority-group [style*="grid"] { grid-template-columns: 1fr !important; }
+  .priority-group .chart-card { padding: 16px; }
+  .priority-group [style*="minmax"] { grid-template-columns: 1fr !important; }
+  /* Product stat grid inside cards */
+  .priority-group div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+  /* Priority group header */
+  .priority-group > div:first-child { flex-wrap: wrap; gap: 6px; }
+  /* Comparison table inside products */
+  .priority-group .cmp-wrap { overflow-x: auto; }
+  .priority-group .cmp-table { min-width: 500px; font-size: 12px; }
+  /* Alert inside products */
+  .priority-group [style*="border-radius:8px"] { font-size: 12px !important; }
+  /* Product card chart title */
+  .priority-group .chart-title { font-size: 15px !important; }
 
   /* Team */
-  .team-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; gap: 14px; }
+  .team-card { padding: 20px; }
 
   /* Contact */
-  .contact-bg { padding: 48px 20px; }
-  .contact-bg h2 { font-size: 26px; }
-  .contact-grid { flex-direction: column; }
-  .contact-item { width: 100%; text-align: center; }
+  .contact-bg { padding: 40px 16px; }
+  .contact-bg h2 { font-size: 24px; }
+  .contact-bg p { font-size: 14px; }
+  .contact-grid { flex-direction: column; gap: 10px; }
+  .contact-item { width: 100%; text-align: center; padding: 14px 20px; }
 
   /* Footer */
-  footer { flex-direction: column; text-align: center; padding: 20px; }
+  footer { flex-direction: column; text-align: center; padding: 16px; gap: 8px; }
+  footer p { font-size: 11px; }
+}
+
+/* ── VERY SMALL (360px) ── */
+@media (max-width: 360px) {
+  .stat-n { font-size: 18px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .revenue-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 26px; }
 }
 </style>
 </head>
@@ -597,16 +635,28 @@ body.en .cn-only { display: none; }
       <span class="cn-only">中国正以更低廉、更快速的 CAR-T 疗法吸引来自澳大利亚、美国和英国的海外癌症患者。以下案例展示了一位患者的成功经历，同时也指出中国长期疗效数据和医疗旅游地位仍在发展中。</span>
     </p>
 
-    <!-- Video embed (hidden in regions where YouTube is blocked) -->
-    <div class="video-wrap" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:16px; border:1px solid rgba(255,255,255,0.1); margin-bottom:48px;">
-      <iframe
-        src="https://www.youtube.com/embed/FPHI7p4ei74?start=1162"
-        title="CAR-T Therapy"
-        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>
+    <!-- Video thumbnail — opens YouTube directly (embedding disabled by video owner) -->
+    <a href="https://www.youtube.com/watch?v=FPHI7p4ei74&t=1162s" target="_blank" rel="noopener"
+       style="display:block; position:relative; border-radius:16px; overflow:hidden; margin-bottom:48px; border:1px solid rgba(255,255,255,0.1); text-decoration:none; cursor:pointer;">
+      <!-- YouTube thumbnail image -->
+      <img
+        src="https://img.youtube.com/vi/FPHI7p4ei74/maxresdefault.jpg"
+        alt="CAR-T Therapy — Why Cancer Patients Are Flying to China (Bloomberg)"
+        style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;"
+        onerror="this.src='https://img.youtube.com/vi/FPHI7p4ei74/hqdefault.jpg'">
+      <!-- Play button overlay -->
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.35); transition:background 0.2s;"
+           onmouseover="this.style.background='rgba(0,0,0,0.2)'"
+           onmouseout="this.style.background='rgba(0,0,0,0.35)'">
+        <div style="width:72px; height:72px; background:#ff0000; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(0,0,0,0.4); margin-bottom:14px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span style="color:#fff; font-size:14px; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,0.8);" class="en-only">Watch on YouTube — starts at 19:22</span>
+        <span style="color:#fff; font-size:14px; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,0.8);" class="cn-only">在YouTube观看 — 从19:22开始</span>
+        <span style="color:rgba(255,255,255,0.7); font-size:12px; margin-top:4px;" class="en-only">Bloomberg News · Opens in new tab</span>
+        <span style="color:rgba(255,255,255,0.7); font-size:12px; margin-top:4px;" class="cn-only">彭博新闻 · 在新标签页打开</span>
+      </div>
+    </a>
 
     <!-- Key points below the video -->
     <p style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:24px; text-align:center;">
@@ -848,7 +898,7 @@ body.en .cn-only { display: none; }
       <span class="en-only" style="font-size:14px; color:var(--muted);">CD19 CAR-T · B-cell Lymphoma · Strongest evidence · First recommendation</span>
       <span class="cn-only" style="font-size:14px; color:var(--muted);">CD19 CAR-T · B细胞淋巴瘤 · 证据最充分 · 首选推荐</span>
     </div>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(440px, 1fr)); gap:20px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap:20px;">
       <div class="chart-card" style="border-left:4px solid #10b981;">
         <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
           <div>
@@ -858,7 +908,7 @@ body.en .cn-only { display: none; }
           </div>
           <span style="background:#d1fae5; color:#065f46; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 83%</span>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px,100%), 1fr)); gap:10px; font-size:13px;">
           <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">DLBCL, FL, MCL</strong><strong class="cn-only">大B细胞淋巴瘤、滤泡性淋巴瘤、MCL</strong></div>
           <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.2M (~$165K)</strong></div>
           <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2021</strong></div>
@@ -880,7 +930,7 @@ body.en .cn-only { display: none; }
           </div>
           <span style="background:#d1fae5; color:#065f46; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 80%</span>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px,100%), 1fr)); gap:10px; font-size:13px;">
           <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">DLBCL, MCL (post-BTKi)</strong><strong class="cn-only">DLBCL、MCL（BTKi后）</strong></div>
           <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.29M (~$177K)</strong></div>
           <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2021</strong></div>
@@ -903,7 +953,7 @@ body.en .cn-only { display: none; }
       <span class="en-only" style="font-size:14px; color:var(--muted);">BCMA CAR-T · Multiple Myeloma · Strong data · Second recommendation</span>
       <span class="cn-only" style="font-size:14px; color:var(--muted);">BCMA CAR-T · 多发性骨髓瘤 · 数据强劲 · 次选推荐</span>
     </div>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(440px, 1fr)); gap:20px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap:20px;">
       <div class="chart-card" style="border-left:4px solid #f59e0b;">
         <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
           <div>
@@ -913,7 +963,7 @@ body.en .cn-only { display: none; }
           </div>
           <span style="background:#fef3c7; color:#92400e; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 98%</span>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px,100%), 1fr)); gap:10px; font-size:13px;">
           <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">Multiple Myeloma (3L+)</strong><strong class="cn-only">多发性骨髓瘤（三线以上）</strong></div>
           <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.15M (~$158K)</strong></div>
           <div><span style="color:var(--muted);" class="en-only">CR rate: </span><span style="color:var(--muted);" class="cn-only">完全缓解率：</span><strong>78% (CARTITUDE-1)</strong></div>
@@ -933,7 +983,7 @@ body.en .cn-only { display: none; }
           </div>
           <span style="background:#fef3c7; color:#92400e; font-size:11px; font-weight:700; padding:4px 10px; border-radius:10px;">ORR 96%</span>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(180px,100%), 1fr)); gap:10px; font-size:13px;">
           <div><span style="color:var(--muted);" class="en-only">Indication: </span><span style="color:var(--muted);" class="cn-only">适应症：</span><strong class="en-only">Multiple Myeloma (3L+)</strong><strong class="cn-only">多发性骨髓瘤（三线以上）</strong></div>
           <div><span style="color:var(--muted);" class="en-only">China price: </span><span style="color:var(--muted);" class="cn-only">中国价格：</span><strong style="color:#0d9488;">¥1.166M (~$160K)</strong></div>
           <div><span style="color:var(--muted);" class="en-only">Approved: </span><span style="color:var(--muted);" class="cn-only">获批年份：</span><strong>2023</strong></div>
