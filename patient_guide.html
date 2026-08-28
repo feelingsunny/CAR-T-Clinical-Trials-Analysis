@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CAR-T Patient Guide — CARTBridge Health</title>
+<style>
+:root {
+  --p1:    #059669;
+  --p1bg:  #d1fae5;
+  --p1lt:  #f0fdf4;
+  --p2:    #d97706;
+  --p2bg:  #fef3c7;
+  --p2lt:  #fffbeb;
+  --p3:    #dc2626;
+  --p3bg:  #fee2e2;
+  --p3lt:  #fff5f5;
+  --ink:   #0f172a;
+  --muted: #64748b;
+  --card:  #ffffff;
+  --bg:    #f8fafc;
+  --border:#e2e8f0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+/* ── TOP BAR ── */
+.topbar {
+  background: #0f172a;
+  padding: 0 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; position: sticky; top: 0; z-index: 100;
+}
+.topbar-logo { color: #fff; font-weight: 700; font-size: 15px; }
+.topbar-logo span { color: #34d399; }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+.lang-btn {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 12px;
+  cursor: pointer; font-weight: 600;
+}
+.back-btn {
+  color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ── PRODUCT NAV ── */
+.prod-nav {
+  background: #fff; border-bottom: 1px solid var(--border);
+  padding: 0 16px; overflow-x: auto; white-space: nowrap;
+  display: flex; gap: 0; -webkit-overflow-scrolling: touch;
+}
+.prod-tab {
+  padding: 14px 16px; font-size: 13px; font-weight: 600;
+  border-bottom: 3px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all 0.15s; color: var(--muted);
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.prod-tab:hover { color: var(--ink); }
+.prod-tab.active.p1 { color: var(--p1); border-bottom-color: var(--p1); }
+.prod-tab.active.p2 { color: var(--p2); border-bottom-color: var(--p2); }
+.prod-tab.active.p3 { color: var(--p3); border-bottom-color: var(--p3); }
+
+/* ── PRODUCT PAGES ── */
+.product-page { display: none; }
+.product-page.active { display: block; }
+
+/* ── HERO CARD ── */
+.hero-card {
+  padding: 28px 20px 24px;
+  position: relative; overflow: hidden;
+}
+.hero-card.p1 { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
+.hero-card.p2 { background: linear-gradient(135deg, #78350f 0%, #92400e 100%); }
+.hero-card.p3 { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); }
+.priority-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
+  margin-bottom: 16px;
+}
+.drug-name { font-size: clamp(22px, 5vw, 32px); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 4px; }
+.drug-generic { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
+.hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.hero-stat { }
+.hero-stat-n { font-size: 24px; font-weight: 800; color: #fff; line-height: 1; }
+.hero-stat-l { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* ── CONTENT ── */
+.content { max-width: 680px; margin: 0 auto; padding: 0 16px 40px; }
+
+.section-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; margin-top: 16px;
+}
+.section-card h3 {
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 14px;
+}
+.section-card h3.p1 { color: var(--p1); }
+.section-card h3.p2 { color: var(--p2); }
+.section-card h3.p3 { color: var(--p3); }
+
+/* ── STAT GRID ── */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-box { background: var(--bg); border-radius: 8px; padding: 14px; }
+.stat-box .num { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.stat-box .lbl { font-size: 12px; color: var(--muted); }
+.stat-box.green .num { color: var(--p1); }
+.stat-box.amber .num { color: var(--p2); }
+.stat-box.red   .num { color: var(--p3); }
+.stat-box.save  .num { color: #0891b2; }
+
+/* ── COMPARISON ROW ── */
+.cmp-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.cmp-row:last-child { border-bottom: none; padding-bottom: 0; }
+.cmp-lbl { color: var(--muted); }
+.cmp-val { font-weight: 600; text-align: right; }
+.cmp-val.good { color: var(--p1); }
+.cmp-val.bad  { color: var(--p3); }
+
+/* ── STEPS ── */
+.step { display: flex; gap: 14px; margin-bottom: 16px; }
+.step:last-child { margin-bottom: 0; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+}
+.step-num.p1 { background: var(--p1); }
+.step-num.p2 { background: var(--p2); }
+.step-num.p3 { background: var(--p3); }
+.step-text h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.step-text p  { font-size: 13px; color: var(--muted); }
+
+/* ── ALERT BOX ── */
+.alert-box {
+  border-radius: 10px; padding: 16px; margin-top: 16px; font-size: 14px; line-height: 1.6;
+}
+.alert-box.info  { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.alert-box.warn  { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.alert-box.world { background: var(--p3lt); border: 1px solid var(--p3bg); color: #7f1d1d; }
+.alert-box strong { display: block; margin-bottom: 4px; }
+
+/* ── TAG LIST ── */
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.tag {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 500;
+}
+
+/* ── CTA ── */
+.cta-card {
+  background: #0f172a; border-radius: 12px;
+  padding: 24px 20px; text-align: center; margin-top: 16px;
+}
+.cta-card h3 { color: #fff; font-size: 17px; margin-bottom: 8px; }
+.cta-card p  { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 20px; }
+.cta-btn {
+  display: inline-block; background: #34d399; color: #0f172a;
+  font-weight: 700; font-size: 14px; padding: 12px 28px;
+  border-radius: 8px; text-decoration: none; margin: 4px;
+}
+.cta-btn.outline {
+  background: transparent; color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ── LANG ── */
+body.cn .en-only { display: none; }
+body.en .cn-only { display: none; }
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  text-align: center; font-size: 11px; color: var(--muted);
+  padding: 20px 16px; border-top: 1px solid var(--border);
+  max-width: 680px; margin: 0 auto;
+}
+
+@media (max-width: 400px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 12px; }
+}
+</style>
+</head>
+<body class="en">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">CART<span>Bridge</span> Health</div>
+  <div class="topbar-right">
+    <a href="investor.html" class="back-btn en-only">← Back</a>
+    <a href="investor.html" class="back-btn cn-only">← 返回</a>
+    <button class="lang-btn" onclick="toggleLang()">中文 / EN</button>
+  </div>
+</div>
+
+<!-- PRODUCT NAV -->
+<div class="prod-nav">
+  <button class="prod-tab p1 active" onclick="showProduct('yescarta', this)">奕凯达® (P1)</button>
+  <button class="prod-tab p1" onclick="showProduct('relmac', this)">倍诺达® (P1)</button>
+  <button class="prod-tab p2" onclick="showProduct('carvykti', this)">卡卫荻® (P2)</button>
+  <button class="prod-tab p2" onclick="showProduct('fucaso', this)">福可苏® (P2)</button>
+  <button class="prod-tab p3" onclick="showProduct('satricel', this)">恺力美® (P3)</button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCT 1 — 奕凯达® (Yescarta)
+═══════════════════════════════════════════════════════════ -->
+<div class="product-page active" id="pg-yescarta">
+  <div class="hero-card p1">
+    <div class="priority-badge">🟢 Priority 1 · CD19 CAR-T</div>
+    <div class="drug-name">奕凯达®</div>
+    <div class="drug-generic en-only">Axicabtagene ciloleucel (Yescarta) · Fosun Kite</div>
+    <div class="drug-generic cn-only">阿基仑赛注射液 · 复星凯特</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">83%</div><div class="hero-stat-l">ORR</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">1,500+</div><div class="hero-stat-l en-only">Patients (China)</div><div class="hero-stat-l cn-only">中国治疗人数</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">~14</div><div class="hero-stat-l en-only">Days mfg</div><div class="hero-stat-l cn-only">制造天数</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">2021</div><div class="hero-stat-l en-only">NMPA approved</div><div class="hero-stat-l cn-only">获批年份</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- What is it -->
+    <div class="section-card">
+      <h3 class="p1 en-only">What is 奕凯达®?</h3>
+      <h3 class="p1 cn-only">什么是奕凯达®？</h3>
+      <p class="en-only">奕凯达® is a CAR-T cell therapy that uses your own immune cells (T cells) to fight B-cell lymphoma. Doctors collect your T cells, genetically modify them to recognize and destroy cancer cells, then infuse them back into your body. It is manufactured by Fosun Kite — a joint venture between Fosun Pharma and Kite/Gilead — and is the same product as Yescarta sold in the USA and Europe.</p>
+      <p class="cn-only">奕凯达®是一种CAR-T细胞疗法，利用您自身的免疫细胞（T细胞）来对抗B细胞淋巴瘤。医生采集您的T细胞，对其进行基因改造使其能够识别并消灭癌细胞，然后将改造后的细胞回输至您体内。该产品由复星医药与吉利德/Kite合资的复星凯特生产，与美国和欧洲销售的Yescarta为同款产品。</p>
+    </div>
+
+    <!-- Who qualifies -->
+    <div class="section-card">
+      <h3 class="p1 en-only">Who may qualify?</h3>
+      <h3 class="p1 cn-only">哪些患者可能符合资格？</h3>
+      <div class="tag-list">
+        <span class="tag en-only">Large B-cell Lymphoma (DLBCL)</span><span class="tag cn-only">大B细胞淋巴瘤（DLBCL）</span>
+        <span class="tag en-only">Follicular Lymphoma (FL)</span><span class="tag cn-only">滤泡性淋巴瘤（FL）</span>
+        <span class="tag en-only">Mantle Cell Lymphoma (MCL)</span><span class="tag cn-only">套细胞淋巴瘤（MCL）</span>
+        <span class="tag en-only">Relapsed or refractory (2+ prior treatments)</span><span class="tag cn-only">复发/难治（经过2线以上治疗）</span>
+        <span class="tag en-only">Adult patients</span><span class="tag cn-only">成人患者</span>
+      </div>
+      <div class="alert-box info" style="margin-top:14px;">
+        <span class="en-only">⚠️ A detailed eligibility assessment is required. Not all lymphoma patients qualify. Contact us for a free evaluation.</span>
+        <span class="cn-only">⚠️ 需要进行详细资格评估。并非所有淋巴瘤患者均符合条件。请联系我们进行免费评估。</span>
+      </div>
+    </div>
+
+    <!-- Cost comparison -->
+    <div class="section-card">
+      <h3 class="p1 en-only">Cost comparison</h3>
+      <h3 class="p1 cn-only">费用对比</h3>
+      <div class="stat-grid">
+        <div class="stat-box green"><div class="num">¥1.2M</div><div class="lbl en-only">China price (~$165K USD)</div><div class="lbl cn-only">中国定价（约16.5万美元）</div></div>
+        <div class="stat-box red"><div class="num">$373K</div><div class="lbl en-only">USA price (USD)</div><div class="lbl cn-only">美国定价（美元）</div></div>
+        <div class="stat-box save" style="grid-column:1/-1"><div class="num">~$208K</div><div class="lbl en-only">Potential savings by treating in China (56% less)</div><div class="lbl cn-only">赴华治疗可节省约20.8万美元（节省56%）</div></div>
+      </div>
+      <p style="font-size:12px; color:var(--muted); margin-top:10px;" class="en-only">Note: Prices shown are list prices. Additional costs include travel, accommodation, and follow-up care. CARTBridge Health will provide a full cost estimate for your specific case.</p>
+      <p style="font-size:12px; color:var(--muted); margin-top:10px;" class="cn-only">注：以上为上市定价，实际总费用还需加上交通、住宿及随访费用。CARTBridge Health 将为您提供个案全面费用估算。</p>
+    </div>
+
+    <!-- What to expect -->
+    <div class="section-card">
+      <h3 class="p1 en-only">What to expect — step by step</h3>
+      <h3 class="p1 cn-only">治疗全程 — 逐步说明</h3>
+      <div class="step"><div class="step-num p1">1</div><div class="step-text"><h4 class="en-only">Free assessment (Week 1)</h4><h4 class="cn-only">免费评估（第1周）</h4><p class="en-only">We review your medical records and confirm eligibility with partner hospitals in China.</p><p class="cn-only">我们审阅您的病历，并与中国合作医院确认资格。</p></div></div>
+      <div class="step"><div class="step-num p1">2</div><div class="step-text"><h4 class="en-only">T-cell collection (Week 2–3)</h4><h4 class="cn-only">T细胞采集（第2–3周）</h4><p class="en-only">You travel to China. Doctors collect your T cells via a simple blood procedure (leukapheresis), taking about 3–4 hours.</p><p class="cn-only">您赴华后，医生通过白细胞单采术采集T细胞，约需3–4小时。</p></div></div>
+      <div class="step"><div class="step-num p1">3</div><div class="step-text"><h4 class="en-only">Manufacturing (~14 days)</h4><h4 class="cn-only">细胞制造（约14天）</h4><p class="en-only">Your cells are sent to the lab in Beijing, modified, and returned. You remain in China during this period.</p><p class="cn-only">细胞送往北京实验室进行基因改造，约14天后返回。期间您留在中国。</p></div></div>
+      <div class="step"><div class="step-num p1">4</div><div class="step-text"><h4 class="en-only">Infusion & monitoring (Week 4–6)</h4><h4 class="cn-only">回输与监测（第4–6周）</h4><p class="en-only">Modified T cells are infused back into your body. You stay in hospital for monitoring. Side effects (CRS) are managed by the medical team.</p><p class="cn-only">改造后的T细胞回输至体内。您需住院接受监测，医疗团队负责管理细胞因子释放综合征等副反应。</p></div></div>
+      <div class="step"><div class="step-num p1">5</div><div class="step-text"><h4 class="en-only">Return & follow-up</h4><h4 class="cn-only">回国随访</h4><p class="en-only">After discharge, you return home. We coordinate ongoing monitoring with your local oncologist.</p><p class="cn-only">出院后返回居住地，我们协调您的本地肿瘤科医生进行持续随访。</p></div></div>
+    </div>
+
+    <!-- Clinical evidence -->
+    <div class="section-card">
+      <h3 class="p1 en-only">Clinical evidence</h3>
+      <h3 class="p1 cn-only">临床证据</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Objective Response Rate (ORR)</span><span class="cmp-lbl cn-only">客观缓解率（ORR）</span><span class="cmp-val good">83%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Complete Response Rate (CRR)</span><span class="cmp-lbl cn-only">完全缓解率（CRR）</span><span class="cmp-val good">~58%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Patients treated in China</span><span class="cmp-lbl cn-only">中国治疗患者数</span><span class="cmp-val">1,500+</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Longest documented remission</span><span class="cmp-lbl cn-only">最长记录缓解时间</span><span class="cmp-val good">8+ years</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">NMPA approval</span><span class="cmp-lbl cn-only">NMPA获批年份</span><span class="cmp-val">2021</span></div>
+    </div>
+
+    <div class="cta-card">
+      <h3 class="en-only">Ready to learn if you qualify?</h3>
+      <h3 class="cn-only">想了解您是否符合条件？</h3>
+      <p class="en-only">Our free assessment takes less than 48 hours. No commitment required.</p>
+      <p class="cn-only">免费评估48小时内完成，无需任何承诺。</p>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn en-only">Get free assessment</a>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn cn-only">申请免费评估</a>
+      <a href="tel:+14315540238" class="cta-btn outline">+1 (431) 554-0238</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCT 2 — 倍诺达® (Relma-cel)
+═══════════════════════════════════════════════════════════ -->
+<div class="product-page" id="pg-relmac">
+  <div class="hero-card p1">
+    <div class="priority-badge">🟢 Priority 1 · CD19 CAR-T · MCL Specialist</div>
+    <div class="drug-name">倍诺达®</div>
+    <div class="drug-generic en-only">Relmacabtagene autoleucel (Relma-cel) · JW Therapeutics</div>
+    <div class="drug-generic cn-only">瑞基奥仑赛注射液 · 药明巨诺</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">80%</div><div class="hero-stat-l">ORR</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">MCL</div><div class="hero-stat-l en-only">Unique indication</div><div class="hero-stat-l cn-only">独特适应症</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">~14</div><div class="hero-stat-l en-only">Days mfg</div><div class="hero-stat-l cn-only">制造天数</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">2021</div><div class="hero-stat-l en-only">NMPA approved</div><div class="hero-stat-l cn-only">获批年份</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-card">
+      <h3 class="p1 en-only">What is 倍诺达®?</h3>
+      <h3 class="p1 cn-only">什么是倍诺达®？</h3>
+      <p class="en-only">倍诺达® is a CD19-targeting CAR-T therapy developed by JW Therapeutics (a joint venture of WuXi AppTec and Juno Therapeutics). It is specifically approved for mantle cell lymphoma (MCL) after BTK inhibitor treatment — an indication not available for any other CAR-T product in China.</p>
+      <p class="cn-only">倍诺达®是由药明巨诺（药明康德与Juno Therapeutics合资公司）开发的CD19靶向CAR-T疗法，专门获批用于BTK抑制剂治疗后的套细胞淋巴瘤（MCL）——这一适应症在中国目前无其他CAR-T产品具备。</p>
+    </div>
+    <div class="section-card">
+      <h3 class="p1 en-only">Who may qualify?</h3>
+      <h3 class="p1 cn-only">哪些患者可能符合资格？</h3>
+      <div class="tag-list">
+        <span class="tag en-only">Mantle Cell Lymphoma (MCL) — after BTK inhibitor</span><span class="tag cn-only">套细胞淋巴瘤（MCL）—— BTKi治疗后</span>
+        <span class="tag en-only">Large B-cell Lymphoma (DLBCL)</span><span class="tag cn-only">大B细胞淋巴瘤（DLBCL）</span>
+        <span class="tag en-only">Relapsed or refractory</span><span class="tag cn-only">复发/难治性</span>
+        <span class="tag en-only">Adult patients</span><span class="tag cn-only">成人患者</span>
+      </div>
+      <div class="alert-box info" style="margin-top:14px;">
+        <span class="en-only">⭐ <strong>Key advantage:</strong> If you have MCL and have already received a BTK inhibitor (ibrutinib, acalabrutinib, zanubrutinib), 倍诺达® may be your best option — this specific indication is unique to this product.</span>
+        <span class="cn-only">⭐ <strong>核心优势：</strong>如果您患有MCL且已接受过BTK抑制剂治疗（伊布替尼、阿可替尼、泽布替尼），倍诺达®可能是您的最佳选择——此特定适应症为该产品独有。</span>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p1 en-only">Cost comparison</h3>
+      <h3 class="p1 cn-only">费用对比</h3>
+      <div class="stat-grid">
+        <div class="stat-box green"><div class="num">¥1.29M</div><div class="lbl en-only">China price (~$177K USD)</div><div class="lbl cn-only">中国定价（约17.7万美元）</div></div>
+        <div class="stat-box red"><div class="num">N/A</div><div class="lbl en-only">Not available in USA or Canada</div><div class="lbl cn-only">美国/加拿大均无此产品</div></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p1 en-only">Clinical evidence</h3>
+      <h3 class="p1 cn-only">临床证据</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">ORR (DLBCL)</span><span class="cmp-lbl cn-only">ORR（DLBCL）</span><span class="cmp-val good">~80%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">MCL post-BTKi indication</span><span class="cmp-lbl cn-only">BTKi后MCL适应症</span><span class="cmp-val good">Unique in China</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Manufacturing time</span><span class="cmp-lbl cn-only">制造周期</span><span class="cmp-val">~14 days</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">NMPA approval</span><span class="cmp-lbl cn-only">NMPA获批年份</span><span class="cmp-val">2021</span></div>
+    </div>
+    <div class="cta-card">
+      <h3 class="en-only">Have MCL or DLBCL? Let's talk.</h3>
+      <h3 class="cn-only">患有MCL或DLBCL？欢迎咨询。</h3>
+      <p class="en-only">Free assessment — we'll tell you if 倍诺达® is right for your situation.</p>
+      <p class="cn-only">免费评估——我们将为您判断倍诺达®是否适合您的情况。</p>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn en-only">Get free assessment</a>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn cn-only">申请免费评估</a>
+      <a href="tel:+14315540238" class="cta-btn outline">+1 (431) 554-0238</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCT 3 — 卡卫荻® (Carvykti)
+═══════════════════════════════════════════════════════════ -->
+<div class="product-page" id="pg-carvykti">
+  <div class="hero-card p2">
+    <div class="priority-badge">🟡 Priority 2 · BCMA CAR-T · Multiple Myeloma</div>
+    <div class="drug-name">卡卫荻®</div>
+    <div class="drug-generic en-only">Ciltacabtagene autoleucel (Carvykti) · Legend Biotech / Janssen</div>
+    <div class="drug-generic cn-only">西达基奥仑赛注射液 · 传奇生物/强生</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">98%</div><div class="hero-stat-l">ORR</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">78%</div><div class="hero-stat-l en-only">Complete Remission</div><div class="hero-stat-l cn-only">完全缓解率</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">$307K</div><div class="hero-stat-l en-only">Savings vs USA</div><div class="hero-stat-l cn-only">较美国节省</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-card">
+      <h3 class="p2 en-only">What is 卡卫荻®?</h3>
+      <h3 class="p2 cn-only">什么是卡卫荻®？</h3>
+      <p class="en-only">卡卫荻® is a BCMA-targeting CAR-T therapy for multiple myeloma patients. It is the same product as CARVYKTI sold in the USA — manufactured by Legend Biotech and Janssen (Johnson & Johnson). It has the best clinical evidence of any BCMA CAR-T product globally, with a 98% response rate in the pivotal CARTITUDE-1 trial.</p>
+      <p class="cn-only">卡卫荻®是针对多发性骨髓瘤的BCMA靶向CAR-T疗法，与美国上市的CARVYKTI为同款产品，由传奇生物和强生（Janssen）联合生产。其临床证据在全球BCMA CAR-T产品中最为优异，关键CARTITUDE-1试验显示缓解率高达98%。</p>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Who may qualify?</h3>
+      <h3 class="p2 cn-only">哪些患者可能符合资格？</h3>
+      <div class="tag-list">
+        <span class="tag en-only">Relapsed/refractory Multiple Myeloma</span><span class="tag cn-only">复发/难治性多发性骨髓瘤</span>
+        <span class="tag en-only">3+ prior lines of therapy</span><span class="tag cn-only">既往3线以上治疗</span>
+        <span class="tag en-only">Prior proteasome inhibitor</span><span class="tag cn-only">既往使用过蛋白酶体抑制剂</span>
+        <span class="tag en-only">Prior immunomodulatory drug</span><span class="tag cn-only">既往使用过免疫调节剂</span>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Cost comparison</h3>
+      <h3 class="p2 cn-only">费用对比</h3>
+      <div class="stat-grid">
+        <div class="stat-box green"><div class="num">¥1.15M</div><div class="lbl en-only">China price (~$158K USD)</div><div class="lbl cn-only">中国定价（约15.8万美元）</div></div>
+        <div class="stat-box red"><div class="num">$465K</div><div class="lbl en-only">USA price (same product)</div><div class="lbl cn-only">美国定价（同款产品）</div></div>
+        <div class="stat-box save" style="grid-column:1/-1"><div class="num">~$307K</div><div class="lbl en-only">Savings by treating in China (66% less)</div><div class="lbl cn-only">赴华治疗可节省约30.7万美元（节省66%）</div></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Clinical evidence (CARTITUDE-1)</h3>
+      <h3 class="p2 cn-only">临床证据（CARTITUDE-1）</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Objective Response Rate (ORR)</span><span class="cmp-lbl cn-only">客观缓解率（ORR）</span><span class="cmp-val good">98%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Complete Response Rate</span><span class="cmp-lbl cn-only">完全缓解率</span><span class="cmp-val good">78%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Global ranking</span><span class="cmp-lbl cn-only">全球排名</span><span class="cmp-val good">Best-in-class BCMA globally</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">China NMPA approval</span><span class="cmp-lbl cn-only">中国NMPA获批</span><span class="cmp-val">2024</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">USA FDA approval</span><span class="cmp-lbl cn-only">美国FDA获批</span><span class="cmp-val">2022</span></div>
+    </div>
+    <div class="alert-box info">
+      <span class="en-only">⭐ <strong>Continuity of care:</strong> Because 卡卫荻® (China) and CARVYKTI (USA) are the same product, patients who receive treatment in China can seamlessly continue follow-up care with their North American oncologist using the same product data.</span>
+      <span class="cn-only">⭐ <strong>护理连续性：</strong>由于卡卫荻®（中国）与CARVYKTI（美国）为同款产品，在中国接受治疗的患者可无缝衔接，由北美肿瘤科医生基于相同产品数据进行后续随访。</span>
+    </div>
+    <div class="cta-card">
+      <h3 class="en-only">Multiple myeloma patient? Start here.</h3>
+      <h3 class="cn-only">多发性骨髓瘤患者？从这里开始。</h3>
+      <p class="en-only">Free eligibility check — same product as USA CARVYKTI, at 66% lower cost.</p>
+      <p class="cn-only">免费资格核查 —— 与美国CARVYKTI同款，费用低66%。</p>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn en-only">Get free assessment</a>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn cn-only">申请免费评估</a>
+      <a href="tel:+14315540238" class="cta-btn outline">+1 (431) 554-0238</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCT 4 — 福可苏® (Fucaso)
+═══════════════════════════════════════════════════════════ -->
+<div class="product-page" id="pg-fucaso">
+  <div class="hero-card p2">
+    <div class="priority-badge">🟡 Priority 2 · BCMA CAR-T · Domestic China</div>
+    <div class="drug-name">福可苏®</div>
+    <div class="drug-generic en-only">Equecabtagene autoleucel (Fucaso) · Iaso Bio / Innovent</div>
+    <div class="drug-generic cn-only">伊基奥仑赛注射液 · 驯鹿生物/信达生物</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">96%</div><div class="hero-stat-l">ORR</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">¥1.17M</div><div class="hero-stat-l en-only">China price</div><div class="hero-stat-l cn-only">中国定价</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">2023</div><div class="hero-stat-l en-only">NMPA approved</div><div class="hero-stat-l cn-only">获批年份</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-card">
+      <h3 class="p2 en-only">What is 福可苏®?</h3>
+      <h3 class="p2 cn-only">什么是福可苏®？</h3>
+      <p class="en-only">福可苏® is a domestically developed Chinese BCMA CAR-T therapy for multiple myeloma, jointly developed by Iaso Bio and Innovent Biologics. It has an excellent 96.2% response rate and a wide hospital network across China, making it an accessible alternative when 卡卫荻® is unavailable or the wait is longer.</p>
+      <p class="cn-only">福可苏®是由驯鹿生物与信达生物联合开发的国产BCMA CAR-T产品，用于治疗多发性骨髓瘤，客观缓解率高达96.2%。国内医院网络覆盖广泛，是卡卫荻®不可及或等待时间较长时的优质备选方案。</p>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Who may qualify?</h3>
+      <h3 class="p2 cn-only">哪些患者可能符合资格？</h3>
+      <div class="tag-list">
+        <span class="tag en-only">Relapsed/refractory Multiple Myeloma</span><span class="tag cn-only">复发/难治性多发性骨髓瘤</span>
+        <span class="tag en-only">3+ prior lines of therapy</span><span class="tag cn-only">既往3线以上治疗</span>
+        <span class="tag en-only">Prior proteasome inhibitor</span><span class="tag cn-only">既往使用过蛋白酶体抑制剂</span>
+        <span class="tag en-only">Prior immunomodulatory drug</span><span class="tag cn-only">既往使用过免疫调节剂</span>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Cost comparison</h3>
+      <h3 class="p2 cn-only">费用对比</h3>
+      <div class="stat-grid">
+        <div class="stat-box green"><div class="num">¥1.17M</div><div class="lbl en-only">China price (~$160K USD)</div><div class="lbl cn-only">中国定价（约16万美元）</div></div>
+        <div class="stat-box amber"><div class="num">N/A</div><div class="lbl en-only">Not available outside China</div><div class="lbl cn-only">中国以外暂无上市</div></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="p2 en-only">Clinical evidence</h3>
+      <h3 class="p2 cn-only">临床证据</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Objective Response Rate (ORR)</span><span class="cmp-lbl cn-only">客观缓解率（ORR）</span><span class="cmp-val good">96.2%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Product origin</span><span class="cmp-lbl cn-only">产品来源</span><span class="cmp-val">Domestic China</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Hospital network</span><span class="cmp-lbl cn-only">医院网络</span><span class="cmp-val good">Wide China coverage</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">NMPA approval</span><span class="cmp-lbl cn-only">NMPA获批年份</span><span class="cmp-val">2023</span></div>
+    </div>
+    <div class="cta-card">
+      <h3 class="en-only">Multiple myeloma — explore all options.</h3>
+      <h3 class="cn-only">多发性骨髓瘤 —— 探索所有选择。</h3>
+      <p class="en-only">We'll compare 卡卫荻® and 福可苏® for your specific case and recommend the best fit.</p>
+      <p class="cn-only">我们将针对您的具体情况对比卡卫荻®与福可苏®，为您推荐最合适的方案。</p>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn en-only">Get free assessment</a>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn cn-only">申请免费评估</a>
+      <a href="tel:+14315540238" class="cta-btn outline">+1 (431) 554-0238</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRODUCT 5 — 恺力美® (Satri-cel)
+═══════════════════════════════════════════════════════════ -->
+<div class="product-page" id="pg-satricel">
+  <div class="hero-card p3">
+    <div class="priority-badge">🔴 Priority 3 · CLDN18.2 · World First · Gastric Cancer</div>
+    <div class="drug-name">恺力美® 🌍</div>
+    <div class="drug-generic en-only">Satricabtagene autoleucel (Satri-cel) · CARsgen · Approved June 22, 2026</div>
+    <div class="drug-generic cn-only">舒瑞基奥仑赛注射液 · 科济药业 · 2026年6月22日获批</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">World</div><div class="hero-stat-l en-only">First solid tumor</div><div class="hero-stat-l cn-only">全球首个实体瘤</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">China</div><div class="hero-stat-l en-only">Only country</div><div class="hero-stat-l cn-only">唯一可及地</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">Lancet</div><div class="hero-stat-l en-only">Published 2025</div><div class="hero-stat-l cn-only">2025年发表</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="alert-box world">
+      <strong class="en-only">🚨 GLOBAL BREAKTHROUGH — June 22, 2026</strong>
+      <strong class="cn-only">🚨 全球突破性进展 — 2026年6月22日</strong>
+      <span class="en-only">恺力美® is the world's first CAR-T therapy approved for any solid tumor. It is only available in China. No other country has approved this treatment.</span>
+      <span class="cn-only">恺力美®是全球首个获批用于实体瘤的CAR-T疗法，目前仅在中国可及。其他任何国家均未批准此疗法。</span>
+    </div>
+
+    <div class="section-card">
+      <h3 class="p3 en-only">What is 恺力美®?</h3>
+      <h3 class="p3 cn-only">什么是恺力美®？</h3>
+      <p class="en-only">恺力美® targets Claudin 18.2 (CLDN18.2), a protein found on the surface of gastric cancer cells. It is developed by CARsgen Therapeutics and represents a historic milestone — the first time CAR-T technology has successfully treated a solid tumor. Results were published in The Lancet in 2025.</p>
+      <p class="cn-only">恺力美®靶向Claudin 18.2（CLDN18.2）蛋白，该蛋白表达于胃癌细胞表面。该产品由科济药业开发，是一项历史性突破——CAR-T技术首次成功应用于实体瘤治疗。相关研究结果于2025年发表在《柳叶刀》杂志。</p>
+    </div>
+
+    <div class="section-card">
+      <h3 class="p3 en-only">Who may qualify?</h3>
+      <h3 class="p3 cn-only">哪些患者可能符合资格？</h3>
+      <div class="tag-list">
+        <span class="tag en-only">Advanced Gastric Cancer</span><span class="tag cn-only">晚期胃癌</span>
+        <span class="tag en-only">Gastroesophageal Junction (GEJ) Cancer</span><span class="tag cn-only">胃食管交界腺癌（GEJ）</span>
+        <span class="tag en-only">CLDN18.2 positive (≥40% tumor cells)</span><span class="tag cn-only">CLDN18.2阳性（≥40%肿瘤细胞）</span>
+        <span class="tag en-only">HER2 negative</span><span class="tag cn-only">HER2阴性</span>
+        <span class="tag en-only">2+ prior lines of treatment failed</span><span class="tag cn-only">既往至少2线治疗失败</span>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px;">
+        <strong class="en-only">⚠️ Biomarker testing required</strong>
+        <strong class="cn-only">⚠️ 需要生物标志物检测</strong>
+        <span class="en-only">Before applying, you must confirm CLDN18.2 expression (≥40%) and HER2-negative status through tumor biopsy testing. We can help coordinate this testing from Canada or the USA.</span>
+        <span class="cn-only">申请前需通过肿瘤活检确认CLDN18.2表达（≥40%）及HER2阴性状态。我们可协助在加拿大或美国安排此项检测。</span>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3 class="p3 en-only">Clinical evidence (CT041-ST-01 trial — The Lancet 2025)</h3>
+      <h3 class="p3 cn-only">临床证据（CT041-ST-01试验 —《柳叶刀》2025年）</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Trial design</span><span class="cmp-lbl cn-only">试验设计</span><span class="cmp-val">Randomized Phase 1b/2</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Median PFS (Satri-cel)</span><span class="cmp-lbl cn-only">中位无进展生存期（试验组）</span><span class="cmp-val good">3.25 months</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Median PFS (control)</span><span class="cmp-lbl cn-only">中位无进展生存期（对照组）</span><span class="cmp-val">1.77 months</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Hazard ratio</span><span class="cmp-lbl cn-only">风险比（HR）</span><span class="cmp-val good">0.37 (63% reduction in risk)</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Approval date</span><span class="cmp-lbl cn-only">获批日期</span><span class="cmp-val">June 22, 2026 (NMPA)</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Available in USA / Canada</span><span class="cmp-lbl cn-only">美国/加拿大是否可及</span><span class="cmp-val bad">Not yet approved</span></div>
+    </div>
+
+    <div class="section-card">
+      <h3 class="p3 en-only">Important considerations</h3>
+      <h3 class="p3 cn-only">重要注意事项</h3>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Price</span><span class="cmp-lbl cn-only">价格</span><span class="cmp-val en-only">TBD — newly approved, pricing not yet announced</span><span class="cmp-val cn-only">待定——刚获批，商业定价尚未公布</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">CRS (any grade)</span><span class="cmp-lbl cn-only">细胞因子释放综合征（任意级别）</span><span class="cmp-val bad">95.5%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">CRS (Grade ≥3)</span><span class="cmp-lbl cn-only">细胞因子释放综合征（3级以上）</span><span class="cmp-val">4.5%</span></div>
+      <div class="cmp-row"><span class="cmp-lbl en-only">Real-world experience</span><span class="cmp-lbl cn-only">真实世界经验</span><span class="cmp-val en-only">Limited — approved &lt;3 months ago</span><span class="cmp-val cn-only">有限——获批不足3个月</span></div>
+      <p style="font-size:12px; color:var(--muted); margin-top:12px;" class="en-only">Because this product is newly approved, we recommend discussing with your oncologist and contacting us to stay updated on hospital availability and pricing as they become confirmed.</p>
+      <p style="font-size:12px; color:var(--muted); margin-top:12px;" class="cn-only">由于该产品刚刚获批，我们建议先与您的肿瘤科医生讨论，同时联系我们，我们将及时跟进医院开展情况及定价信息。</p>
+    </div>
+
+    <div class="cta-card">
+      <h3 class="en-only">Gastric cancer patient? You may have a new option.</h3>
+      <h3 class="cn-only">胃癌患者？您可能拥有全新的治疗选择。</h3>
+      <p class="en-only">Contact us now — we're tracking hospital availability and pricing as they are confirmed. Be among the first to know.</p>
+      <p class="cn-only">立即联系我们 —— 我们正在实时跟进医院开展情况和定价信息，让您第一时间获悉最新动态。</p>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn en-only">Contact us now</a>
+      <a href="mailto:liuyang6093@gmail.com" class="cta-btn cn-only">立即联系我们</a>
+      <a href="tel:+14315540238" class="cta-btn outline">+1 (431) 554-0238</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <span class="en-only">This information is for educational purposes only and does not constitute medical advice. All treatment decisions should be made with your oncologist. CARTBridge Health is a coordination service, not a medical provider. · <strong>CARTBridge Health</strong> · liuyang6093@gmail.com</span>
+  <span class="cn-only">本页面内容仅供患者教育参考，不构成医疗建议。所有治疗决策均应在您的肿瘤科医生指导下做出。CARTBridge Health 是医疗协调服务，而非医疗机构。· <strong>CARTBridge Health</strong> · liuyang6093@gmail.com</span>
+</div>
+
+<script>
+// Language toggle
+function toggleLang() {
+  document.body.classList.toggle("en");
+  document.body.classList.toggle("cn");
+}
+if (!document.body.classList.contains("cn")) document.body.classList.add("en");
+
+// Product tab switching
+function showProduct(id, btn) {
+  // Hide all pages
+  document.querySelectorAll(".product-page").forEach(p => p.classList.remove("active"));
+  // Show selected
+  document.getElementById("pg-" + id).classList.add("active");
+  // Update tabs
+  document.querySelectorAll(".prod-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  // Scroll to top
+  window.scrollTo({ top: 52, behavior: "smooth" });
+}
+
+// Handle URL hash for direct linking
+const hash = window.location.hash.replace("#", "");
+const validIds = ["yescarta","relmac","carvykti","fucaso","satricel"];
+if (validIds.includes(hash)) {
+  const btn = document.querySelector(`.prod-tab[onclick*="${hash}"]`);
+  if (btn) showProduct(hash, btn);
+}
+</script>
+</body>
+</html>
