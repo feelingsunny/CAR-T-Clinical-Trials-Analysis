@@ -1,7 +1,7 @@
 # CAR-T Clinical Trials & Treatment Analysis Pipeline
 
-[![Monthly Data Update](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml/badge.svg)](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml)
-[![Deploy to Pages](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml/badge.svg)](https://github.com/feelingsunny/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml)
+[![Monthly Data Update](https://github.com/CARTBridgeHealth/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml/badge.svg)](https://github.com/CARTBridgeHealth/CAR-T-Clinical-Trials-Analysis/actions/workflows/monthly_update.yml)
+[![Deploy to Pages](https://github.com/CARTBridgeHealth/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml/badge.svg)](https://github.com/CARTBridgeHealth/CAR-T-Clinical-Trials-Analysis/actions/workflows/static.yml)
 
 An end-to-end data pipeline analyzing **2,913 real-world CAR-T clinical trials** and **global treatment availability** across 7 countries — combining SQL database design, Python data engineering, Power BI visualization, and interactive web publishing. Data is refreshed automatically every month via GitHub Actions.
 
@@ -11,9 +11,9 @@ An end-to-end data pipeline analyzing **2,913 real-world CAR-T clinical trials**
 
 | | Site | Description |
 |---|---|---|
-| 📊 | [Data Analysis](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/) | Interactive clinical trial charts — growth trends, country breakdown, phase analysis |
-| 💼 | [Investor Presentation](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/investor.html) | Full business case — problem, service model, product strategy, data, team · Bilingual EN/CN · Mobile responsive |
-| 🏥 | [Patient Guide](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html) | One-page product guides for all 5 Priority 1–3 CAR-T products · Bilingual EN/CN · Mobile responsive |
+| 📊 | [Data Analysis](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/) | Interactive clinical trial charts — growth trends, country breakdown, phase analysis |
+| 💼 | [Investor Presentation](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/investor.html) | Full business case — problem, service model, product strategy, data, team · Bilingual EN/CN · Mobile responsive |
+| 🏥 | [Patient Guide](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html) | One-page product guides for all 5 Priority 1–3 CAR-T products · Bilingual EN/CN · Mobile responsive |
 
 ---
 
@@ -66,7 +66,7 @@ Five products organized into four priority tiers for patient coordination:
 | 🔴 P3 | 恺力美® (Satri-cel) | CLDN18.2 | Gastric/GEJ Cancer 🌍 World First | TBD | — |
 | ⚪ P4 | FDA products (USA) | — | Pediatric ALL, CLL, special cases | $373K–$475K | — |
 
-→ Full bilingual patient guide: [patient_guide.html](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html)
+→ Full bilingual patient guide: [patient_guide.html](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html)
 
 ---
 
@@ -179,8 +179,8 @@ This project underpins **CARTBridge Health** — a cross-border CAR-T medical co
 
 | Resource | Link |
 |---|---|
-| 💼 Investor Presentation | [investor.html](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/investor.html) |
-| 🏥 Patient Guide | [patient_guide.html](https://feelingsunny.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html) |
+| 💼 Investor Presentation | [investor.html](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/investor.html) |
+| 🏥 Patient Guide | [patient_guide.html](https://cartbridgehealth.github.io/CAR-T-Clinical-Trials-Analysis/patient_guide.html) |
 
 ---
 
@@ -191,5 +191,5 @@ This project underpins **CARTBridge Health** — a cross-border CAR-T medical co
 Biomedical researcher with expertise in microfluidics, point-of-care diagnostics, and data analysis. Bridging clinical research with data engineering and cross-border healthcare access.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-yang--liu--6093-blue?logo=linkedin)](https://www.linkedin.com/in/yang-liu-6093/)
-[![GitHub](https://img.shields.io/badge/GitHub-feelingsunny-black?logo=github)](https://github.com/feelingsunny)
+[![GitHub](https://img.shields.io/badge/GitHub-CARTBridgeHealth-black?logo=github)](https://github.com/CARTBridgeHealth)
 📧 liuyang6093@gmail.com · 📞 +1 (431) 554-0238
